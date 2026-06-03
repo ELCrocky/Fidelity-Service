@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fidelite_db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 007omerbond 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
