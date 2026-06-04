@@ -1,5 +1,8 @@
 package com.fidelite.enums;
 
-public class CardStatus {
+public enum CardStatus {
     
+    ACTIVE,
+    BLOCKED,
+    LOST
 }
