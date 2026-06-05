@@ -39,26 +39,29 @@ public class LoyaltyCard {
 
     @NotBlank
     @Column(nullable = false, length = 13, unique = true)
-    private String barcodeEan13;
+    private String barcodeEan13; // EAN-13 barcode printed on the physical or digital card
 
     @Min(0)
     @Column(nullable = false)
-    private int pointsBalance;
+    private int pointsBalance; // Current point balance on this card
 
+    // Whether the card is usable (ACTIVE) or blocked/expired
     @Builder.Default
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private CardStatus status = CardStatus.ACTIVE;
 
-    //relations
+    // The customer who owns this card
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    // All point-earning transactions made with this card
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Transaction> transactiona = new ArrayList<>();
-    
+
+    // All reward redemptions made with this card
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Redemption> redemptions = new ArrayList<>();

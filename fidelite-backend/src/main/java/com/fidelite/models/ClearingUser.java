@@ -28,6 +28,7 @@ public class ClearingUser {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID cuId;
 
+    // The clearing company this user belongs to
     @ManyToOne(optional = false)
     @JoinColumn(name = "clearing_company_id", nullable = false)
     private ClearingCompany clearingCompany;
@@ -35,5 +36,5 @@ public class ClearingUser {
     @Email
     @NotBlank
     @Column(nullable = false, unique = true)
-    private String passwordHash;
+    private String passwordHash; // Hashed password for authentication
 }

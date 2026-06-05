@@ -31,13 +31,13 @@ public class Reward {
 
     @NotBlank
     @Column(nullable = false)
-    private String name;
+    private String name; // Display name of the reward (e.g. Free Coffee)
 
     @Min(1)
     @Column(nullable = false)
-    private int costPoints;
+    private int costPoints; // Number of points required to redeem this reward
 
-    //Relations
+    // The merchant offering this reward
     @ManyToOne(optional = false)
     @JoinColumn(name = "merchant_id", nullable = false)
     private Merchant merchant;

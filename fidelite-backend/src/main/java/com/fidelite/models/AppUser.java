@@ -40,13 +40,13 @@ public class AppUser {
 
     @NotBlank
     @Column(nullable = false)
-    private String passwordHash;
+    private String passwordHash; // BCrypt-hashed password
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role; // Determines what actions this user is authorized to perform
 
-    //relations
+    // The merchant this user belongs to and manages
     @ManyToOne(optional = false)
     @JoinColumn(name = "merchant_id", nullable = false)
     private Merchant merchant;

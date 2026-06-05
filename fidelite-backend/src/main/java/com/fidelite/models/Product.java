@@ -31,18 +31,19 @@ public class Product {
 
     @NotBlank
     @Column(nullable = false)
-    private String name;
+    private String name; // Display name of the product
 
     @Enumerated(EnumType.STRING)
-    private ProductType productType;
+    private ProductType productType; // Category of the product
 
     @Column(nullable = false)
-    private int productPoint;
+    private int productPoint; // Points awarded when this product is purchased
 
+    // Whether this product is currently featured in a promotion
     @Column(nullable = false)
     private boolean promotion = false;
 
-    //relations
+    // The merchant that sells this product
     @ManyToOne(optional = false)
     @JoinColumn(name = "merchant_id", nullable = false)
     private Merchant merchant;

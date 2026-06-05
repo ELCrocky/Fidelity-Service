@@ -31,17 +31,18 @@ public class Tier {
     
     @NotBlank
     @Column(nullable = false)
-    private String name;
+    private String name; // Display name of the tier (e.g. Silver, Gold)
 
     @Min(0)
     @Column(nullable = false)
-    private int minPoints;
+    private int minPoints; // Minimum points required to reach this tier
 
+    // Points multiplier applied to transactions for customers in this tier
     @Builder.Default
     @Column(nullable = false, precision = 4, scale = 2)
     private BigDecimal multiplier = new BigDecimal("1.0");
-    
-    //relations
+
+    // The merchant this tier belongs to
     @ManyToOne(optional = false)
     @JoinColumn(name = "merchant_id", nullable = false)
     private Merchant merchant;

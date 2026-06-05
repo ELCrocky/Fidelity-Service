@@ -37,25 +37,27 @@ public class Transaction {
     private Long transactionId;
 
     @Column(nullable = false)
-    private int points;
+    private int points; // Number of points earned or deducted in this transaction
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private TransactionType type;
+    private TransactionType type; // Whether points were earned (GAIN) or spent (SPENT)
 
+    // Unique key to prevent duplicate transactions from retried requests
     @Column(unique = true)
     private String idempotencyKey;
 
     @Builder.Default
     @Column(nullable = false, updatable = false)
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now(); // Timestamp when the transaction occurred
 
-    //Relations
+    // The loyalty card this transaction was made on
     @ManyToOne(optional = false)
     @JoinColumn(name = "card_id", nullable = false)
     private LoyaltyCard card;
 
+    // Products purchased in this transaction (used for point calculation)
     @ManyToMany
     @JoinTable(
         name = "transaction_product",

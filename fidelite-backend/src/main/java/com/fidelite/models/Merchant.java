@@ -37,30 +37,29 @@ public class Merchant {
     
     @NotBlank
     @Column(nullable = false)
-    private String name;
+    private String name; // Business name of the merchant
 
     @Column(nullable = false, unique = true)
-    private String apiKey;
+    private String apiKey; // Secret key used to authenticate API requests from the merchant
 
     @Builder.Default
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private MerchantStatus status = MerchantStatus.ACTIVE;
+    private MerchantStatus status = MerchantStatus.ACTIVE; // Whether the merchant account is active or suspended
 
     @Builder.Default
     @Column(nullable = false, updatable = false)
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now(); // Timestamp when the merchant was registered
 
-    //relationlar
-
+    // The settlement pool this merchant's transactions are settled through
     @ManyToOne(optional=false)
     @JoinColumn(name = "pool_id", nullable = false)
     private SettlementPool pool;
 
     @Column
-    private String city;
+    private String city; // City where the merchant operates
 
     @Column
-    private String region;
+    private String region; // Region/province where the merchant operates
 }

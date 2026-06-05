@@ -33,16 +33,19 @@ public class ClearingCompany {
 
     @NotBlank
     @Column(nullable = false)
-    private String name;
+    private String name; // Legal name of the clearing company
 
+    // Cumulative revenue across all settlement pools
     @Column(nullable = false, precision = 16, scale=2)
     @Builder.Default
     private BigDecimal totalRevenue = BigDecimal.ZERO;
 
+    // Staff/operators who belong to this clearing company
     @OneToMany(mappedBy = "clearingCompany", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<ClearingUser> users = new ArrayList<>();
 
+    // Settlement pools managed by this clearing company
     @OneToMany(mappedBy = "clearingCompany")
     @Builder.Default
     private List<SettlementPool> pools = new ArrayList<>();

@@ -30,13 +30,14 @@ public class Redemption {
 
     @Builder.Default
     @Column(nullable = false, updatable = false)
-    private LocalDateTime reddemedAt = LocalDateTime.now();
+    private LocalDateTime reddemedAt = LocalDateTime.now(); // Timestamp when the reward was redeemed
 
-    //Relations
+    // The loyalty card used for this redemption
     @ManyToOne(optional = false)
     @JoinColumn(name = "card_id", nullable = false)
     private LoyaltyCard card;
 
+    // The reward that was redeemed
     @ManyToOne(optional = false)
     @JoinColumn(name = "reward_id", nullable = false)
     private Reward reward;

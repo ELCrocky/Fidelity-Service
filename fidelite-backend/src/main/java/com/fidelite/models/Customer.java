@@ -47,21 +47,24 @@ public class Customer {
 
     private String phone;
 
-    private LocalDate dateDeNaissance;
+    private LocalDate dateDeNaissance; // Customer's date of birth, used for birthday promotions
 
+    // Whether the customer agreed to receive marketing communications
     @Builder.Default
     @Column(nullable = false)
     private boolean marketingConsent = false;
 
-    //Relations
+    // The merchant that enrolled this customer
     @ManyToOne(optional = false)
     @JoinColumn(name = "merchant_ide", nullable = false)
     private Merchant merchant;
 
+    // Current loyalty tier the customer belongs to (null = no tier yet)
     @ManyToOne
     @JoinColumn(name = "tier_id")
     private Tier tier;
 
+    // All loyalty cards associated with this customer
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<LoyaltyCard> cards = new ArrayList<>();

@@ -34,34 +34,37 @@ public class Settlement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long settlementId;
 
+    // The pool this settlement belongs to
     @ManyToOne(optional = false)
     @JoinColumn(name = "pool_id", nullable = false)
     private SettlementPool pool;
 
     @Column(nullable = false)
-    private LocalDate periodStart;
-
-
-    @Column(nullable = false)
-    private LocalDate periodEnd;
+    private LocalDate periodStart; // Start date of the billing period
 
     @Column(nullable = false)
-    private long pointsIssued;
+    private LocalDate periodEnd; // End date of the billing period
 
     @Column(nullable = false)
-    private long pointsRedeemed;
+    private long pointsIssued; // Total points issued to customers during this period
 
+    @Column(nullable = false)
+    private long pointsRedeemed; // Total points redeemed by customers during this period
+
+    // Net monetary amount owed after points are balanced
     @Column(nullable = false, precision = 14, scale = 2)
     private BigDecimal netAmount;
 
+    // Clearing company commission for this settlement
     @Column(nullable = false, precision = 10, scale = 2)
     @Builder.Default
     private BigDecimal commision = BigDecimal.ZERO;
 
     @Column(nullable = false, updatable = false)
     @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now(); // Timestamp when settlement was created
 
+    // Per-merchant breakdown lines for this settlement
     @OneToMany(mappedBy = "settlement", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Settlement> lines = new ArrayList<>();

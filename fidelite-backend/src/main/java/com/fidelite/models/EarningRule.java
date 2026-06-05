@@ -29,17 +29,17 @@ public class EarningRule {
     private Long earningRuleId;
 
     @Column(nullable = false)
-    private String condition;
+    private String condition; // Rule expression that determines when points are awarded
 
     @Min(0)
     @Column(nullable = false)
-    private int pointsAwarded;
+    private int pointsAwarded; // Number of points given when this rule is triggered
 
-    private LocalDate validForm;
+    private LocalDate validForm; // Date from which this rule is active (null = always active)
 
-    private LocalDate validTo;
+    private LocalDate validTo; // Date until which this rule is active (null = no expiry)
 
-    //Relations
+    // The merchant this earning rule applies to
     @ManyToOne(optional = false)
     @JoinColumn(name = "merchant_id", nullable = false)
     private Merchant merchant;
