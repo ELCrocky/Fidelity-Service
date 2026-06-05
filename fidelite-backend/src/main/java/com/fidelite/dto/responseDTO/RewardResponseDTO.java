@@ -1,12 +1,14 @@
 package com.fidelite.dto.responseDTO;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.UUID;
 
-@Getter
-@Setter
-@Builder
+import lombok.Data;
+
+@Data
 public class RewardResponseDTO {
+
+    private UUID id;
+    private String name;
+    private int costPoints;
 
 }

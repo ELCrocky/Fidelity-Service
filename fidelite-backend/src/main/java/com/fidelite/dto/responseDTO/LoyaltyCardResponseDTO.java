@@ -1,12 +1,17 @@
 package com.fidelite.dto.responseDTO;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.UUID;
 
-@Getter
-@Setter
-@Builder
+import com.fidelite.enums.CardStatus;
+
+import lombok.Data;
+
+@Data
 public class LoyaltyCardResponseDTO {
 
+    private UUID id;
+    private String barcodeEan13;
+    private int pointsBalance;
+    private CardStatus status;
+    
 }

@@ -1,12 +1,28 @@
 package com.fidelite.dto.responseDTO;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDate;
+import java.util.UUID;
 
-@Getter
-@Setter
-@Builder
+
+import lombok.Data;
+
+@Data
 public class CustomerResponseDTO {
+
+private UUID id;
+
+private String nom;
+
+private String prenom;
+
+private String email;
+
+private String phone;
+
+private LocalDate dateNaissance;
+
+private boolean markettingConsent;
+
+private String tierName;
 
 }

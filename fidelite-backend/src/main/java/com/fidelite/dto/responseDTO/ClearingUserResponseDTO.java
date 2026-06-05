@@ -2,14 +2,13 @@ package com.fidelite.dto.responseDTO;
 
 import java.util.UUID;
 
-import com.fidelite.enums.Role;
-
 import lombok.Data;
 
 @Data
-public class AppUserResponseDTO {
+public class ClearingUserResponseDTO {
+
     private UUID id;
     private String email;
-    private Role role;
-    private UUID merchantId;
+    private UUID clearingCompanyId;
+
 }

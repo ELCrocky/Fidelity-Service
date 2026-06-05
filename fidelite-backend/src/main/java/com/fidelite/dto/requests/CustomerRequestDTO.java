@@ -1,12 +1,26 @@
 package com.fidelite.dto.requests;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDate;
 
-@Getter
-@Setter
-@Builder
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
+@Data
 public class CustomerRequestDTO {
 
+    @NotBlank
+    private String nom;
+
+    @NotBlank
+    private String prenom;
+
+    @Email
+    private String email;
+
+    private String phone;
+
+    private LocalDate dateNaissance;
+
+    private boolean marketingConsent;
 }

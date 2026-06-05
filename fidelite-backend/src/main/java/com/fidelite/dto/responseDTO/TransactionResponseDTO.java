@@ -1,12 +1,19 @@
 package com.fidelite.dto.responseDTO;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDateTime;
+import java.util.List;
 
-@Getter
-@Setter
-@Builder
+import com.fidelite.enums.TransactionType;
+
+import lombok.Data;
+
+@Data
 public class TransactionResponseDTO {
+
+    private Long id;
+    private int points;
+    private TransactionType type;
+    private LocalDateTime createdAt;
+    private List<String> productNames;
 
 }

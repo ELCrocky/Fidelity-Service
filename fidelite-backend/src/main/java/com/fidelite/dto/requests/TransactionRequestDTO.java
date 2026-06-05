@@ -1,12 +1,26 @@
 package com.fidelite.dto.requests;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.List;
+import java.util.UUID;
 
-@Getter
-@Setter
-@Builder
+import com.fidelite.enums.TransactionType;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+@Data
 public class TransactionRequestDTO {
 
+    private int points;
+
+    @NotNull
+    private TransactionType type;
+
+    @NotNull
+    private UUID cardId;
+
+    private List<Long> productsId;
+
+    private String idempotencyKey;
+    
 }

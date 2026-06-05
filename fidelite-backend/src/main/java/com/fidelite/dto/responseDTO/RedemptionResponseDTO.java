@@ -1,12 +1,12 @@
 package com.fidelite.dto.responseDTO;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@Builder
+import lombok.Data;
+
+@Data
 public class RedemptionResponseDTO {
-
+    private Long id;
+    private String rewardName;
+    private LocalDateTime redeemedAt;
 }

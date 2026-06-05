@@ -1,12 +1,17 @@
 package com.fidelite.dto.requests;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.UUID;
 
-@Getter
-@Setter
-@Builder
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+@Data
 public class LoyaltyCardRequestDTO {
 
+    private String barcodeEan13;
+
+    @NotNull
+    private UUID customerId;
+
+    
 }

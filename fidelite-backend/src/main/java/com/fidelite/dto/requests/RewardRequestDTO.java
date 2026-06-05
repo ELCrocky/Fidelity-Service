@@ -1,12 +1,22 @@
 package com.fidelite.dto.requests;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.UUID;
 
-@Getter
-@Setter
-@Builder
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+@Data
 public class RewardRequestDTO {
+
+@NotBlank
+private String name;
+
+@Min(1)
+private int costPoints;
+
+@NotNull
+private UUID merchantId;
 
 }

@@ -1,15 +1,16 @@
 package com.fidelite.dto.responseDTO;
 
 import java.math.BigDecimal;
+import java.util.UUID;
+
 
 import lombok.Data;
 
 @Data
-public class TierResponseDTO {
+public class ClearingCompanyResponseDTO {
 
-    private Long id;
+    private UUID id;
     private String name;
-    private int minPoints;
-    private BigDecimal multiplier;
+    private BigDecimal totalRevenue;
 
 }

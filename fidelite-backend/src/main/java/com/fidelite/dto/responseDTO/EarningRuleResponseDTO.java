@@ -1,12 +1,16 @@
 package com.fidelite.dto.responseDTO;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDate;
 
-@Getter
-@Setter
-@Builder
+import lombok.Data;
+
+@Data
 public class EarningRuleResponseDTO {
+
+private Long id;
+private String condition;
+private int pointsAwarded;
+private LocalDate validFrom;
+private LocalDate validTo;
 
 }

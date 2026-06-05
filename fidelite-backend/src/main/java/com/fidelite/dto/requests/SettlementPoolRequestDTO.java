@@ -1,26 +1,22 @@
 package com.fidelite.dto.requests;
 
+import java.math.BigDecimal;
 import java.util.UUID;
-
-import com.fidelite.enums.ProductType;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class ProductRequestDTO {
-
+public class SettlementPoolRequestDTO {
     @NotBlank
     private String name;
 
-    private ProductType productType;
+    @NotNull
+    private BigDecimal pointValue;
 
-    private int productPoint;
-
-    private boolean promotion;
+    private BigDecimal commissionPerInvoice;
 
     @NotNull
-    private UUID merchantId;
-
+    private UUID clearingCompanyId;
 }
