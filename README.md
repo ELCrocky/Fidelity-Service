@@ -1,6 +1,6 @@
-# Loyalty Service
+# Royalty Service
 
-A multi-tenant loyalty card (carte de fidélité) system built for kiosk and point-of-sale use, designed to be integrated into any business. Each company connects with its own account and manages its own customers, products, tiers, and rewards. Customers are not identified by a password — they are recognized by scanning the QR/barcode on their loyalty card.
+A multi-tenant loyalty card (carte de fidélité) system built for kiosk and point-of-sale use, designed to be integrated into any business — from a single independent shop to a nationwide franchise. Beyond issuing and redeeming points, the system includes a **clearing layer** that settles the financial imbalance points create between branches, so that no branch ever has to invoice another directly.
 
 The backend is built with Spring Boot (Java 21) and the frontend with Angular (TypeScript).
 
@@ -8,9 +8,11 @@ The backend is built with Spring Boot (Java 21) and the frontend with Angular (T
 
 ## Table of contents
 
+- [The problem this solves](#the-problem-this-solves)
 - [System overview](#system-overview)
 - [Architecture](#architecture)
 - [Core concepts](#core-concepts)
+- [The clearing model](#the-clearing-model)
 - [Backend](#backend)
 - [Frontend](#frontend)
 - [Data model](#data-model)
@@ -21,19 +23,27 @@ The backend is built with Spring Boot (Java 21) and the frontend with Angular (T
 
 ---
 
+## The problem this solves
+
+A loyalty point is a liability: when a business issues points, it promises something in return later. Because points are issued and redeemed in different months — and, in a franchise, often at different branches — a business's books swing in and out of balance.
+
+Consider two cases. A single shop gives out 3,000 points worth of value in December; in January customers redeem them and the shop absorbs the cost on its books. In a franchise, branch A issues 500 points and 300 are redeemed there, while branch B issues 200 but 400 are redeemed there. Branch B has honored points that branch A profited from — but B cannot reasonably invoice A, and a customer redeeming in Marseille points earned in Drôme makes a direct invoice between two independent franchisees absurd.
+
+This system places a **clearing house** (the operator of the platform) between the branches. Points settle against a shared pool rather than between branches: a branch that issues more than it redeems pays the pool, and a branch that redeems more than it issues is paid by the pool. The clearing house charges a fixed service fee per settlement. No branch ever invoices another — everyone settles only with the pool.
+
+---
+
 ## System overview
 
-Fidelity Service delivers a loyalty program as a service. A single deployment serves many businesses; each business (Merchant) sees only its own data and cannot access another's. This isolation is the foundation of the system.
+Fidelity Service delivers a loyalty program as a service. A single deployment serves many businesses; each business sees only its own data. A typical flow runs through a kiosk or checkout device in a store:
 
-A typical flow runs through a kiosk or checkout device in a store:
-
-1. On startup, the device authenticates with the company's staff account (or API key) and stays connected throughout the day.
+1. On startup, the device authenticates with the company's staff account (or API key) and stays connected.
 2. When a customer arrives, they scan the QR/barcode on their loyalty card.
-3. The system resolves the card and customer from the barcode, then displays the point balance and recent transactions.
+3. The system resolves the card and customer from the barcode and displays the point balance and recent transactions.
 4. A purchase earns points; the customer can spend accumulated points on a reward.
 5. A customer without a card is offered instant card creation.
 
-At no point does the customer enter a password. Their identity is the barcode on their card.
+At no point does the customer enter a password — their identity is the barcode on their card. Separately, at the end of each period, the clearing house settles each pool and produces per-branch financial breakdowns.
 
 ---
 
@@ -56,17 +66,37 @@ The system has two main parts: a backend exposing a REST API and a frontend cons
                                                   └──────────────────────┘
 ```
 
-The backend follows a layered architecture: an incoming request first passes through a security filter (identity and tenant resolution), reaches a controller, runs its business logic in the service layer, and accesses data through repositories. Every tenant-scoped row in the database carries a `merchant_id`, and queries are filtered by it.
+The backend follows a layered architecture: a request passes through a security filter (identity and tenant resolution), reaches a controller, runs its business logic in the service layer, and accesses data through repositories. Every tenant-scoped row carries a `merchant_id`, and queries are filtered by it.
 
 ---
 
 ## Core concepts
 
-Two distinctions are essential to understanding the system.
+Several distinctions are essential to understanding the system.
 
-**AppUser is not Customer.** An AppUser is a person who logs into the system: a company administrator, a cashier, or a kiosk device. They have a password (BCrypt hash) and are authorized by role. A Customer is the end consumer of the loyalty program; they have no password and are identified by their card's barcode. In a store, the cashier (AppUser) processes the points of the customer (Customer) — the two are never the same person.
+**AppUser is not Customer.** An AppUser is a person who logs into the system: a branch administrator or a cashier/kiosk device. They have a password (BCrypt hash) and a role. A Customer is the end consumer; they have no password and are identified by their card's barcode.
 
-**Merchant is the tenant.** Every business integrated into the system is a Merchant and is the root of multi-tenancy. Customers, products, tiers, rules, and rewards all belong to a Merchant. When a company's kiosk runs a query, it sees only the data belonging to its own Merchant.
+**Merchant is the tenant.** Every branch or shop integrated into the system is a Merchant — the operational unit. Customers, products, tiers, rules, and rewards all belong to a Merchant.
+
+**SettlementPool is the brand.** Because points are valid anywhere across a brand, all of a brand's branches settle in a single pool ("BurgerKing France"). The pool is the financial unit. An independent shop is simply a pool with one member.
+
+**ClearingCompany is the operator.** The clearing company runs the platform, manages the pools, issues invoices, and collects commission. It sits above every branch and belongs to none. Its staff (ClearingUser) are entirely separate from branch staff (AppUser) — the two never mix. This separation replaces the earlier idea of a "super admin" role, which blurred the line between branch users and the operator.
+
+---
+
+## The clearing model
+
+The clearing layer rests on three entities working together.
+
+A **SettlementPool** represents a brand and acts like a clearing ledger. It holds the point-to-money rate (each pool sets its own), the running balance, and the fixed commission charged per invoice. Every branch of the brand points to this single pool.
+
+A **Settlement** is the end-of-period reconciliation for a pool — the basis of an invoice. It records the total points issued and redeemed across the pool during the period, the net monetary difference, and the commission taken. A positive net means the pool is owed money (the business is invoiced); a negative net means the pool owes money (a payment is made out).
+
+A **SettlementLine** is the per-branch breakdown within a settlement: one line per Merchant, showing how many points that branch issued, how many were redeemed there, the net point difference, and its monetary value. This is what tells the operator, branch by branch, who is in surplus and who is in deficit. These lines are not new raw data — they are summaries computed from the existing transactions at period close.
+
+Crucially, branches never invoice each other. A branch that issued more than it redeemed owes the pool; a branch that redeemed more than it issued is owed by the pool. Each settles only with the clearing house, while its individual standing against the pool remains visible in its own settlement line.
+
+A branch's current standing — for example, whether it is in surplus this month — is never stored as a field on the Merchant. It is derived on demand: closed periods come from past settlement lines, and the open period is computed by summing the current month's transactions. This keeps a single source of truth and avoids a stored figure drifting out of sync.
 
 ---
 
@@ -74,65 +104,61 @@ Two distinctions are essential to understanding the system.
 
 Built on Spring Boot 3 and Java 21, with responsibilities split into clear layers.
 
-### Layers
+The controller layer handles HTTP requests through DTOs and contains no business logic. The service layer holds the business rules: point earning, tier calculation, reward redemption, idempotency checks, and the period settlement computation. The repository layer consists of Spring Data JPA interfaces that abstract database access; queries are scoped by tenant (for example, `findByMerchantIdAndBarcodeEan13`). The mapper layer (MapStruct) converts between entities and DTOs so the database model never leaks outward.
 
-The controller layer handles HTTP requests and exchanges data through DTOs; it contains no business logic. The service layer holds the actual business rules: point earning, tier calculation, reward redemption, and idempotency checks all run here. The repository layer consists of Spring Data JPA interfaces that abstract database access; queries are filtered by tenant (for example, `findByMerchantIdAndBarcodeEan13`). The mapper layer (MapStruct) converts between entities and DTOs, so the database model never leaks directly to the outside.
+When earning points, the customer's tier multiplier is applied to the base points — a Gold-tier customer with a 1.5 multiplier earns 1.5 times the points of a standard customer for the same purchase. When redeeming a reward, its cost is subtracted from the card balance, which never goes negative. To guard against double-crediting on network retries, each point operation may carry an idempotency key; a second request with the same key adds no new points.
 
-### Request flow
-
-A point-earning request is processed in this order: the request is authenticated with an API key or JWT, the tenant context is resolved, the controller receives the request, the service layer finds the card, checks the idempotency key (rejecting it if the same operation has already been processed), calculates points by applying the appropriate tier multiplier, writes the transaction record, and updates the card balance. All of these steps occur atomically within a single database transaction.
-
-### Business rules
-
-When earning points, the customer's tier comes into play: the base points are multiplied by the tier's multiplier. For example, a customer in the Gold tier with a 1.5 multiplier earns 1.5 times the points a standard customer would for the same purchase. When redeeming a reward, the reward's cost is subtracted from the card balance; if the balance is insufficient the operation is rejected, and the balance never goes negative. Each redemption produces both a Redemption record and a REDEEM-type Transaction that decreases the balance.
-
-### Duplicate-operation protection (idempotency)
-
-To prevent the same point operation from being recorded twice in case of a network failure or retransmission, each operation can carry an idempotency key. A second request with the same key adds no new points and returns the result of the first operation. This prevents accidental double-crediting.
+At period close, the settlement process sums each pool's transactions per branch, writes a SettlementLine for every Merchant, computes the pool-level Settlement total, applies the per-invoice commission, and updates the pool balance — all within a single database transaction.
 
 ---
 
 ## Frontend
 
-A kiosk-oriented interface written in Angular and TypeScript, composed of five main screens.
+A kiosk-oriented interface written in Angular and TypeScript, composed of five main screens: card scanning, customer profile (name, balance, recent transactions), a card-creation offer for customers without a card, the card-creation form (collecting name, email, date of birth, phone, and a stored marketing-consent flag), and personalized promotions filtered by the customer's balance.
 
-The first screen is the card scanning screen: the customer brings their card close to the reader, and if no card is found they are routed to the card creation flow. The second screen is the customer profile: it lists the customer's name, current point balance, and recent transactions. The third screen offers card creation to a customer who has no card. The fourth screen is the card creation form: it collects first name, last name, email, date of birth, and phone number; the marketing consent checkbox is stored for legal record-keeping. The fifth screen shows personalized promotions: rewards the customer can afford are highlighted based on their balance.
+A separate operator-facing view lets the clearing company inspect each pool: the pool-level totals and, for franchises, the per-branch breakdown showing how much each store issued and redeemed and whether it stands in surplus or deficit.
 
-The interface is multilingual (for example, switching between French and English) and performs all server communication through a central API service layer using typed DTOs.
+The interface is multilingual and performs all server communication through a central API service layer using typed DTOs.
 
 ---
 
 ## Data model
 
-The system consists of ten main entities. Every tenant-scoped entity references a Merchant.
+The system is built from fifteen main entities, split into two groups.
 
-`Merchant` is the business integrated into the system; the tenant root. `AppUser` is the staff member or device that logs in and holds the password. `Customer` is the loyalty program member; they have no password. `LoyaltyCard` is the physical/digital card carrying the point balance and barcode. A customer can have more than one card. `Tier` is a loyalty tier (such as Bronze/Silver/Gold), defining the entry threshold and point multiplier. `Product` is an item that earns or is bought with points. `EarningRule` defines conditional point-earning rules and campaigns. `Transaction` is the record of every point movement (earn, redeem, adjust, expire). `Reward` is a benefit that can be claimed with points. `Redemption` is the moment a reward is actually used.
+**Loyalty core (per branch):** `Merchant` (the branch/tenant), `AppUser` (branch staff, holds the password), `Customer` (the member, no password), `LoyaltyCard` (card and point balance), `Tier` (loyalty tier with entry threshold and multiplier), `Product` (an item that earns or is bought with points), `EarningRule` (conditional earning rules and campaigns), `Transaction` (every point movement), `Reward` (a benefit claimable with points), and `Redemption` (the moment a reward is used).
+
+**Clearing layer (the operator):** `ClearingCompany` (the operator), `ClearingUser` (operator staff), `SettlementPool` (the brand-level pool), `Settlement` (per-period reconciliation), and `SettlementLine` (per-branch breakdown within a settlement).
 
 ### Relationships
 
-A Merchant has many AppUsers, Customers, Products, Tiers, EarningRules, and Rewards. A Customer has one or more LoyaltyCards and belongs to a Tier. A LoyaltyCard has many Transactions and Redemptions. A Transaction may contain multiple Products. A Reward can be redeemed many times.
+A ClearingCompany employs many ClearingUsers and manages many SettlementPools. A SettlementPool groups many Merchants and has many Settlements over time; each Settlement breaks down into many SettlementLines, and each line reports against one Merchant.
 
-When a customer is deleted, their cards are deleted along with them, and when cards are deleted, the transactions and redemptions belonging to those cards are deleted too (composition). The link between a Merchant and its sub-entities is looser (aggregation).
+A Merchant employs many AppUsers and owns many Customers, Products, Tiers, EarningRules, and Rewards. A Customer holds one or more LoyaltyCards and belongs to a Tier. A LoyaltyCard records many Transactions and Redemptions. A Transaction may contain multiple Products. A Reward can be redeemed many times.
+
+Deleting a customer deletes their cards, and deleting cards deletes the transactions and redemptions on them (composition). The links between a Merchant and its sub-entities, and between a pool and its branches, are looser (aggregation).
 
 ### Primary keys
 
-Entities that are exposed externally, travel through the API or other systems, and must be unguessable use UUIDs: Merchant, AppUser, Customer, LoyaltyCard, Reward. Records that stay internal or have very high volume use auto-incrementing numeric (Long) keys: Transaction, Redemption, Tier, Product, EarningRule.
+Entities exposed externally or that must be unguessable use UUIDs: ClearingCompany, ClearingUser, SettlementPool, Merchant, AppUser, Customer, LoyaltyCard, Reward. Internal or high-volume records use auto-incrementing numeric (Long) keys: Settlement, SettlementLine, Transaction, Redemption, Tier, Product, EarningRule.
+
+### Money and points
+
+All monetary fields use `BigDecimal`, never floating point, to avoid rounding errors in financial records. Period point totals use `long`, since they can run into the millions.
 
 ### Indexing
 
-Database indexes are defined on frequently filtered columns. In all tenant-scoped tables, `merchant_id` is indexed, because nearly every query filters by tenant. In addition, `Transaction.card_id` (transaction history queries), `Redemption.card_id`, and `Redemption.reward_id` are indexed. Fields carrying a unique constraint — card barcode, user email, merchant API key, idempotency key — are already indexed automatically.
+Frequently filtered columns are indexed. In all tenant-scoped tables `merchant_id` is indexed, since nearly every query filters by tenant. Additional indexes cover `Transaction.card_id`, `Redemption.card_id`, `Redemption.reward_id`, `Merchant.pool_id`, and the foreign keys on settlements. Fields with a unique constraint — card barcode, user email, merchant API key, idempotency key — are indexed automatically.
 
 ---
 
 ## Authentication and security
 
-The system has two distinct authentication mechanisms.
+There are distinct authentication paths. Branch staff and administrators log in with email and password and receive a JWT; passwords are hashed with BCrypt. Kiosk devices may connect with a company API key. Operator staff (ClearingUser) authenticate through their own separate path and are never tied to a branch.
 
-Staff and administrators log in with an email and password; on successful login they receive a JWT (JSON Web Token) and carry it on subsequent requests. Passwords are never stored in plain text — they are hashed with BCrypt. Kiosk and checkout devices can connect with an API key belonging to the company.
+Authorization is role-based within a branch: MERCHANT_ADMIN manages its own branch, and STAFF can only perform point operations and lookups. The clearing company's access is governed by being a ClearingUser, not by a branch role.
 
-Authorization is role-based (RBAC). SUPER_ADMIN manages the entire platform and can see all tenants. MERCHANT_ADMIN manages only its own company. STAFF (cashier/kiosk) can only perform point operations and lookups.
-
-Multi-tenant isolation is at the center of security: every request runs within a tenant context, and repository queries are scoped to that tenant, preventing one company from accessing another company's data.
+Multi-tenant isolation is central: every request runs within a tenant context and repository queries are scoped to that tenant, preventing one business from accessing another's data. The clearing layer can see across pools it manages, but branch users cannot.
 
 ---
 
@@ -158,7 +184,7 @@ npm install
 
 ### Database
 
-Create a database in PostgreSQL. The schema is set up on first startup through database migration tools; in production the schema is not altered automatically, only validated.
+Create a database in PostgreSQL. The schema is set up through database migration tools; in production the schema is validated, not altered automatically.
 
 ---
 
@@ -171,7 +197,7 @@ cd fidelite-backend
 mvn spring-boot:run
 ```
 
-The API runs on `http://localhost:8080` by default. Interactive API documentation (Swagger UI) is available at `http://localhost:8080/swagger-ui.html`.
+The API runs on `http://localhost:8080` by default, with Swagger UI at `http://localhost:8080/swagger-ui.html`.
 
 ### Frontend
 
@@ -186,7 +212,7 @@ The interface runs on `http://localhost:4200`.
 
 ## Environment variables
 
-Sensitive information is not hardcoded; it is supplied through environment variables. The backend expects at least the following: `DB_URL` for the database connection address, `DB_USERNAME` for the database username, `DB_PASSWORD` for the database password, and `JWT_SECRET` for the token signing key. These values are never committed to version control.
+Sensitive information is supplied through environment variables, never hardcoded: `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` for the database, and `JWT_SECRET` for token signing. These values are never committed to version control.
 
 ---
 
