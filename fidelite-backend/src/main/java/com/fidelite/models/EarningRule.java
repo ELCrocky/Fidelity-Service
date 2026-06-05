@@ -35,7 +35,7 @@ public class EarningRule {
     @Column(nullable = false)
     private int pointsAwarded; // Number of points given when this rule is triggered
 
-    private LocalDate validForm; // Date from which this rule is active (null = always active)
+    private LocalDate validFrom; // Date from which this rule is active (null = always active)
 
     private LocalDate validTo; // Date until which this rule is active (null = no expiry)
 

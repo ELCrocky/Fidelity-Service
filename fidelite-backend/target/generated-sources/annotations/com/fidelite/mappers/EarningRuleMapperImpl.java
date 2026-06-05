@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-05T16:11:45+0200",
+    date = "2026-06-05T16:35:11+0200",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
@@ -23,9 +23,9 @@ public class EarningRuleMapperImpl implements EarningRuleMapper {
         EarningRuleResponseDTO earningRuleResponseDTO = new EarningRuleResponseDTO();
 
         earningRuleResponseDTO.setId( earningRule.getEarningRuleId() );
-        earningRuleResponseDTO.setValidFrom( earningRule.getValidForm() );
         earningRuleResponseDTO.setCondition( earningRule.getCondition() );
         earningRuleResponseDTO.setPointsAwarded( earningRule.getPointsAwarded() );
+        earningRuleResponseDTO.setValidFrom( earningRule.getValidFrom() );
         earningRuleResponseDTO.setValidTo( earningRule.getValidTo() );
 
         return earningRuleResponseDTO;
@@ -39,9 +39,9 @@ public class EarningRuleMapperImpl implements EarningRuleMapper {
 
         EarningRule.EarningRuleBuilder earningRule = EarningRule.builder();
 
-        earningRule.validForm( dto.getValidFrom() );
         earningRule.condition( dto.getCondition() );
         earningRule.pointsAwarded( dto.getPointsAwarded() );
+        earningRule.validFrom( dto.getValidFrom() );
         earningRule.validTo( dto.getValidTo() );
 
         return earningRule.build();

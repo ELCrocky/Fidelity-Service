@@ -11,11 +11,9 @@ import com.fidelite.models.EarningRule;
 public interface EarningRuleMapper {
 
     @Mapping(source = "earningRuleId", target = "id")
-    @Mapping(source = "validForm", target = "validFrom") // entity field is misspelled as validForm
     EarningRuleResponseDTO toResponse(EarningRule earningRule);
 
     @Mapping(target = "earningRuleId", ignore = true)
-    @Mapping(target = "merchant", ignore = true)         // Merchant is resolved in service
-    @Mapping(source = "validFrom", target = "validForm") // map back to misspelled entity field
+    @Mapping(target = "merchant", ignore = true) // Merchant is resolved in service
     EarningRule toEntity(EarningRuleRequestDTO dto);
 }
