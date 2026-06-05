@@ -53,16 +53,16 @@ The system has two main parts: a backend exposing a REST API and a frontend cons
 
 ```
 ┌─────────────────┐         REST / JSON          ┌──────────────────────┐
-│  Frontend        │  ───────────────────────▶   │  Backend              │
-│  (Angular / TS)  │   JWT + (optional API key)   │  (Spring Boot / Java) │
-│  Kiosk UI        │  ◀───────────────────────    │                       │
+│  Frontend       │  ───────────────────────▶   │  Backend              │
+│  (Angular / TS) │   JWT + (optional API key)   │  (Spring Boot / Java)│
+│  Kiosk UI       │  ◀───────────────────────   │                      │
 └─────────────────┘                              └──────────┬───────────┘
                                                             │ JPA / Hibernate
                                                             ▼
                                                   ┌──────────────────────┐
-                                                  │  PostgreSQL           │
-                                                  │  (data isolated by    │
-                                                  │   tenant_id)          │
+                                                  │  PostgreSQL          │
+                                                  │  (data isolated by   │
+                                                  │   tenant_id)         │
                                                   └──────────────────────┘
 ```
 
