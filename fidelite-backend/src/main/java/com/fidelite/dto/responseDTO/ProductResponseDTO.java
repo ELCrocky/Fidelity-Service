@@ -1,5 +1,5 @@
 package com.fidelite.dto.responseDTO;
-import com.fidelite.enums.Ptype;
+import com.fidelite.enums.ProductType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import lombok.Setter;
 public class ProductResponseDTO {
     private String name;
 
-    private Ptype productType;
+    private ProductType productType;
 
     private int productPoint;
 }

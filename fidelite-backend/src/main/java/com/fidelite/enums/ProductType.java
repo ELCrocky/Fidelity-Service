@@ -1,6 +1,6 @@
 package com.fidelite.enums;
 
-public enum Ptype {
+public enum ProductType {
     REPAS,
     DESSERT,
     BOISSON
