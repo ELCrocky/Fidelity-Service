@@ -67,7 +67,7 @@ public class Settlement {
     // Per-merchant breakdown lines for this settlement
     @OneToMany(mappedBy = "settlement", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<Settlement> lines = new ArrayList<>();
+    private List<SettlementLine> lines = new ArrayList<>();
 
 
 }
