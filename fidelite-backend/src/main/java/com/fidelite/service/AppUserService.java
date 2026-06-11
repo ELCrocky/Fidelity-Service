@@ -13,6 +13,7 @@ import com.fidelite.models.AppUser;
 
 import lombok.RequiredArgsConstructor;
 
+// Service layer for application user operations.
 @Service
 @RequiredArgsConstructor
 public class AppUserService {

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-05T16:11:26+0200",
+    date = "2026-06-11T16:48:52+0200",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
@@ -27,10 +27,10 @@ public class CustomerMapperImpl implements CustomerMapper {
         customerResponseDTO.setDateNaissance( customer.getDateDeNaissance() );
         customerResponseDTO.setMarkettingConsent( customer.isMarketingConsent() );
         customerResponseDTO.setTierName( customerTierName( customer ) );
-        customerResponseDTO.setNom( customer.getNom() );
-        customerResponseDTO.setPrenom( customer.getPrenom() );
         customerResponseDTO.setEmail( customer.getEmail() );
+        customerResponseDTO.setNom( customer.getNom() );
         customerResponseDTO.setPhone( customer.getPhone() );
+        customerResponseDTO.setPrenom( customer.getPrenom() );
 
         return customerResponseDTO;
     }
@@ -44,11 +44,11 @@ public class CustomerMapperImpl implements CustomerMapper {
         Customer.CustomerBuilder customer = Customer.builder();
 
         customer.dateDeNaissance( dto.getDateNaissance() );
-        customer.nom( dto.getNom() );
-        customer.prenom( dto.getPrenom() );
         customer.email( dto.getEmail() );
-        customer.phone( dto.getPhone() );
         customer.marketingConsent( dto.isMarketingConsent() );
+        customer.nom( dto.getNom() );
+        customer.phone( dto.getPhone() );
+        customer.prenom( dto.getPrenom() );
 
         return customer.build();
     }

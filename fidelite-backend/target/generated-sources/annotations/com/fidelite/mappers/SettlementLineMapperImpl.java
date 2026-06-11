@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-05T16:11:55+0200",
+    date = "2026-06-11T16:48:52+0200",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
@@ -27,10 +27,10 @@ public class SettlementLineMapperImpl implements SettlementLineMapper {
         settlementLineResponseDTO.setMerchantId( settlementLineMerchantIdMerchant( settlementLine ) );
         settlementLineResponseDTO.setMerchantName( settlementLineMerchantName( settlementLine ) );
         settlementLineResponseDTO.setId( settlementLine.getId() );
+        settlementLineResponseDTO.setNetAmount( settlementLine.getNetAmount() );
+        settlementLineResponseDTO.setNetPoints( settlementLine.getNetPoints() );
         settlementLineResponseDTO.setPointsIssued( settlementLine.getPointsIssued() );
         settlementLineResponseDTO.setPointsRedeemed( settlementLine.getPointsRedeemed() );
-        settlementLineResponseDTO.setNetPoints( settlementLine.getNetPoints() );
-        settlementLineResponseDTO.setNetAmount( settlementLine.getNetAmount() );
 
         return settlementLineResponseDTO;
     }

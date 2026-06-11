@@ -14,4 +14,5 @@ public class RedemptionRequestDTO {
     @NotNull
     private UUID rewardId;
 
+    private String idempotencyKey;
 }

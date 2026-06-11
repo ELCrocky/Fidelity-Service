@@ -11,6 +11,7 @@ import com.fidelite.repository.AppUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+// Data-access component for AppUser entities.
 @Component
 @RequiredArgsConstructor
 public class AppUserComponent {

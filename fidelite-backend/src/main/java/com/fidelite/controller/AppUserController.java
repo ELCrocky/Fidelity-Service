@@ -20,6 +20,7 @@ import com.fidelite.service.AppUserService;
 
 import lombok.RequiredArgsConstructor;
 
+// REST controller for application user management.
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
