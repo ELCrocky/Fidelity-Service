@@ -36,5 +36,9 @@ public class ClearingUser {
     @Email
     @NotBlank
     @Column(nullable = false, unique = true)
-    private String passwordHash; // Hashed password for authentication
+    private String email;
+
+    @NotBlank
+    @Column(nullable = false)
+    private String passwordHash; // BCrypt-hashed password
 }

@@ -18,6 +18,6 @@ public class ClearingUserRequestDTO {
     private String password;
 
     @NotNull
-    private UUID clearingCompany;
+    private UUID clearingCompanyId;
 
 }
