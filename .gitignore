@@ -1,0 +1,8 @@
+node_modules/
+target/
+dist/
+.angular/
+*.class
+*.jar
+!**/src/main/**
+!**/src/test/**

@@ -1,0 +1,16 @@
+// Brand palette — import this file in every component SCSS with @use '../../../styles/variables' as v;
+// (adjust relative path depth as needed)
+
+$primary:    #F97316; // orange — active states, CTAs
+$navy:       #1B2A4A; // sidebar background
+$cream:      #FFFBF5; // page background
+$border:     #E5E7EB;
+$text:       #1C1C1C;
+$text-muted: #6B7280;
+$success:    #22C55E;
+$danger:     #EF4444;
+
+// Layout
+$sidebar-width:  240px;
+$card-radius:    16px;
+$card-shadow:    0 2px 12px rgba(0, 0, 0, 0.06);
