@@ -1,0 +1,12 @@
+@use './styles/variables' as *;
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: $cream;
+  color: $text;
+}

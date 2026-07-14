@@ -5,10 +5,10 @@ import { roleGuard } from './core/guards/role.guard';
 
 // Lazy import staff components — keeps the initial bundle small.
 // Borne and dashboard routes: add here when their shells are implemented.
-const routes: Routes = [
+export const routes: Routes = [
   // Auth
   { path: 'login',          loadComponent: () => import('./features/auth/borne-login/borne-login.component').then(m => m.BorneLoginComponent) },
-  { path: 'clearing/login', loadComponent: () => import('./features/auth/clearing-login/clearing-login.component').then(m => m.ClearingLoginComponent) },
+  { path: 'clearing-login', loadComponent: () => import('./features/auth/clearing-login/clearing-login.component').then(m => m.ClearingLoginComponent) },
 
   // Kiosk (STAFF + MERCHANT_ADMIN)
   {

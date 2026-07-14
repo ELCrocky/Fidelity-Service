@@ -1,0 +1,40 @@
+<div class="login-page">
+
+  <div class="brand">
+    <div class="brand-icon">★</div>
+    <div class="brand-text">
+      <span class="brand-name">EROLIS</span>
+      <span class="brand-sub">FIDÉLITÉ</span>
+    </div>
+  </div>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+    <h1>Connexion</h1>
+    <p class="subtitle">Accédez à votre espace de gestion.</p>
+
+    <div class="form-group">
+      <label for="email">Adresse email</label>
+      <input id="email" type="email" formControlName="email"
+             placeholder="vous&#64;erolis.fr">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input id="password" type="password" formControlName="password"
+             placeholder="••••••••">
+    </div>
+
+    @if (errorMessage) {
+      <p class="error">{{ errorMessage }}</p>
+    }
+
+    <button type="submit" [disabled]="loginForm.invalid || isLoading">
+      {{ isLoading ? 'Connexion...' : 'Se connecter' }}
+    </button>
+
+    <p class="help-text">Mot de passe oublié ? Contactez votre administrateur.</p>
+
+  </form>
+
+</div>
