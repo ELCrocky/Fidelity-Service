@@ -1,0 +1,191 @@
+@use '../../../../styles/variables' as *;
+
+.page-head--actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* Product table, toggle switch, and modal styling. */
+.page-head h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #21304f;
+}
+
+.page-head p {
+  margin: 6px 0 0;
+  color: $text-muted;
+}
+
+.primary-btn,
+.secondary-btn,
+.icon-btn,
+.switch {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.primary-btn {
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: $primary;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 10px 20px rgba(255, 122, 26, 0.22);
+}
+
+.panel {
+  margin-top: 24px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid rgba(209, 217, 229, 0.8);
+  box-shadow: 0 8px 20px rgba(25, 42, 74, 0.08);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 18px 22px;
+  border-bottom: 1px solid #f1f5f9;
+  text-align: left;
+}
+
+th {
+  color: $text-muted;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+.strong {
+  font-weight: 700;
+  color: #1f2d49;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tag--repas { background: #eef4ff; color: #2f58f6; border-color: #c8d7ff; }
+.tag--dessert { background: #fff0f6; color: #e91e63; border-color: #ffd0e0; }
+.tag--boisson { background: #ecfbfb; color: #0f9f9f; border-color: #bfeeed; }
+
+.points {
+  font-weight: 700;
+  color: #1f2d49;
+}
+
+.switch {
+  width: 44px;
+  height: 24px;
+  padding: 3px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  position: relative;
+}
+
+.switch.is-on {
+  background: $primary;
+}
+
+.switch__thumb {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translateX(0);
+  transition: transform 0.2s ease;
+}
+
+.switch.is-on .switch__thumb {
+  transform: translateX(20px);
+}
+
+.actions {
+  width: 50px;
+}
+
+.icon-btn {
+  background: transparent;
+  color: $text-muted;
+  font-size: 18px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(19, 29, 46, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.modal {
+  width: min(520px, 100%);
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+}
+
+.modal h2 {
+  margin: 0 0 18px;
+  color: #21304f;
+}
+
+.form-grid {
+  display: grid;
+  gap: 14px;
+}
+
+label span {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  color: #334155;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid $border;
+  font: inherit;
+  color: #1f2d49;
+  outline: 0;
+  background: #fafcff;
+}
+
+.modal__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.secondary-btn {
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: #eef2f7;
+  color: #475569;
+  font-weight: 700;
+}
+
+.error-msg {
+  margin: 0;
+  color: $danger;
+  font-size: 14px;
+}

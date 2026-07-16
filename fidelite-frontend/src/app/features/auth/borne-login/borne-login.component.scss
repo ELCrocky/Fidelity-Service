@@ -114,7 +114,7 @@ button {
   transition: background .2s;
   margin-top: 6px;
 
-  &:hover:not(:disabled) { background: darken($primary, 6%); }
+  &:hover:not(:disabled) { background: $primary-dark; }
 
   &:disabled {
     opacity: .5;

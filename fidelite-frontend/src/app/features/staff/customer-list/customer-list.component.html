@@ -1,0 +1,102 @@
+<!-- Customer management view with search, table, and detail drawer. -->
+<section class="page-head">
+  <div>
+    <h1>Clients</h1>
+    <p>{{ filteredCustomers.length }} clients enregistrés</p>
+  </div>
+</section>
+
+<section class="search-bar">
+  <span class="search-bar__icon">⌕</span>
+  <input [(ngModel)]="searchTerm" type="text" placeholder="Rechercher par nom, email ou code-barres..." />
+</section>
+
+<section class="customers-layout">
+  <div class="panel">
+    <table>
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Code-barres</th>
+          <th>Points</th>
+          <th>Niveau</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (customer of filteredCustomers; track customer.barcode) {
+          <tr [class.is-selected]="customer === selectedCustomer" (click)="selectCustomer(customer)">
+            <td>
+              <div class="customer-cell">
+                <div class="avatar">{{ customer.initials }}</div>
+                <div>
+                  <div class="name">{{ customer.name }}</div>
+                  <div class="email">{{ customer.email }}</div>
+                </div>
+              </div>
+            </td>
+            <td>{{ customer.barcode }}</td>
+            <td class="points">{{ customer.points | number:'1.0-0' }}</td>
+            <td><span class="tier tier--{{ customer.tier.toLowerCase() }}">{{ customer.tier }}</span></td>
+            <td><span class="status" [class.is-muted]="customer.status === 'Inactif'">{{ customer.status }}</span></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (selectedCustomer) {
+    <aside class="detail-panel">
+      <div class="detail-panel__head">
+        <h2>Détail client</h2>
+      </div>
+
+      <div class="detail-panel__identity">
+        <div class="avatar avatar--large">{{ selectedCustomer.initials }}</div>
+        <div>
+          <div class="name name--large">{{ selectedCustomer.name }}</div>
+          <div class="email">{{ selectedCustomer.email }}</div>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-card">
+          <div class="detail-card__value">{{ selectedCustomer.points | number:'1.0-0' }}</div>
+          <div class="detail-card__label">Points</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card__value tier-text">{{ selectedCustomer.tier }}</div>
+          <div class="detail-card__label">Niveau</div>
+        </div>
+      </div>
+
+      <dl class="meta-list">
+        <div>
+          <dt>Code-barres</dt>
+          <dd>{{ selectedCustomer.barcode }}</dd>
+        </div>
+        <div>
+          <dt>Membre depuis</dt>
+          <dd>{{ selectedCustomer.memberSince }}</dd>
+        </div>
+        <div>
+          <dt>Statut</dt>
+          <dd><span class="status" [class.is-muted]="selectedCustomer.status === 'Inactif'">{{ selectedCustomer.status }}</span></dd>
+        </div>
+      </dl>
+
+      <h3>Historique</h3>
+      <div class="history-list">
+        @for (item of selectedCustomer.history; track item.date) {
+          <article class="history-item">
+            <div>
+              <div class="history-item__title">{{ item.label }}</div>
+              <div class="history-item__date">{{ item.date }}</div>
+            </div>
+            <div class="history-item__points" [class.is-negative]="item.points.startsWith('-')">{{ item.points }}</div>
+          </article>
+        }
+      </div>
+    </aside>
+  }
+</section>

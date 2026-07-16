@@ -1,0 +1,42 @@
+<!-- Staff shell: sidebar, operator block, logout action, and routed content. -->
+<div class="layout">
+	<aside class="sidebar">
+		<div class="brand">
+			<div class="brand__mark">★</div>
+			<div>
+				<div class="brand__title">EROLIS</div>
+				<div class="brand__subtitle">FIDÉLITÉ</div>
+			</div>
+		</div>
+
+		<nav class="nav">
+			@for (item of navItems; track item.route) {
+				<a [routerLink]="item.route" routerLinkActive="is-active"
+				   [routerLinkActiveOptions]="{ exact: item.route === '/staff' }"
+				   class="nav__item">
+					<span class="nav__icon" [attr.data-icon]="item.icon"></span>
+					<span>{{ item.label }}</span>
+				</a>
+			}
+		</nav>
+
+		<div class="spacer"></div>
+
+		<div class="profile-card">
+			<div class="profile-card__avatar">{{ operator.initials }}</div>
+			<div>
+				<div class="profile-card__name">{{ operator.name }}</div>
+				<div class="profile-card__email">{{ operator.email }}</div>
+			</div>
+		</div>
+
+		<button type="button" class="logout" (click)="logout()">
+			<span class="nav__icon" data-icon="logout"></span>
+			<span>Déconnexion</span>
+		</button>
+	</aside>
+
+	<main class="content">
+		<router-outlet></router-outlet>
+	</main>
+</div>

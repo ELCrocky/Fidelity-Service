@@ -1,24 +1,35 @@
-import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
-// Shell layout: navy sidebar + <router-outlet> for child routes.
-// Nav links: /staff (home), /staff/customers, /staff/products, /staff/rewards, /staff/tiers
-// Logout button calls AuthService.logout() then navigates to /login.
+// Staff shell layout with sidebar navigation, operator profile, and routed content.
 @Component({
   selector: 'app-staff-shell',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './staff-shell.component.html',
   styleUrl: './staff-shell.component.scss'
 })
 export class StaffShellComponent {
+  private readonly _authService = inject(AuthService);
+  private readonly _router = inject(Router);
 
-  constructor(private authService: AuthService, private router: Router) {}
+  protected readonly navItems = [
+    { label: 'Tableau de bord', route: '/staff', icon: 'grid' },
+    { label: 'Clients', route: '/staff/customers', icon: 'users' },
+    { label: 'Produits', route: '/staff/products', icon: 'box' },
+    { label: 'Récompenses', route: '/staff/rewards', icon: 'gift' },
+    { label: 'Niveaux', route: '/staff/tiers', icon: 'layers' }
+  ];
 
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+  protected readonly operator = {
+    name: 'Manager',
+    email: 'admin@erolis.fr',
+    initials: 'M'
+  };
+
+  protected logout(): void {
+    this._authService.logout();
+    this._router.navigate(['/login']);
   }
 }

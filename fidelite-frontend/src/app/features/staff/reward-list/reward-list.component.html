@@ -1,0 +1,53 @@
+<!-- Rewards grid with inline actions and a reactive form modal. -->
+<section class="page-head page-head--actions">
+  <div>
+    <h1>Récompenses</h1>
+    <p>Configurez les récompenses disponibles pour vos clients</p>
+  </div>
+
+  <button type="button" class="primary-btn" (click)="openForm()">+ Nouvelle récompense</button>
+</section>
+
+<section class="cards-grid">
+  @for (reward of rewards; track reward.id) {
+    <article class="reward-card">
+      <div class="reward-card__icon">🎁</div>
+      <div class="reward-card__top-actions">
+        <button type="button" class="ghost-icon" (click)="openForm(reward)">✎</button>
+        <button type="button" class="ghost-icon" (click)="deleteReward(reward.id)">🗑</button>
+      </div>
+      <h2>{{ reward.name }}</h2>
+      <p>{{ reward.description }}</p>
+      <div class="reward-card__points">★ {{ reward.costPoints }} pts</div>
+    </article>
+  }
+</section>
+
+@if (showForm) {
+  <div class="modal-backdrop">
+    <div class="modal">
+      <h2>{{ editingId !== null ? 'Modifier la récompense' : 'Nouvelle récompense' }}</h2>
+      <form [formGroup]="rewardForm" (ngSubmit)="onSubmit()" class="form-grid">
+        <label>
+          <span>Nom</span>
+          <input type="text" formControlName="name" placeholder="Nom de la récompense" />
+        </label>
+        <label>
+          <span>Coût en points</span>
+          <input type="number" formControlName="costPoints" placeholder="Coût en points" />
+        </label>
+        <label>
+          <span>Description</span>
+          <textarea rows="3" formControlName="description" placeholder="Description courte"></textarea>
+        </label>
+        @if (errorMessage) {
+          <p class="error-msg">{{ errorMessage }}</p>
+        }
+        <div class="modal__actions">
+          <button type="submit" class="primary-btn" [disabled]="rewardForm.invalid">Enregistrer</button>
+          <button type="button" class="secondary-btn" (click)="closeForm()">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

@@ -1,0 +1,73 @@
+<!-- Product list with toggle switch and reactive form modal. -->
+<section class="page-head page-head--actions">
+  <div>
+    <h1>Produits</h1>
+    <p>Gérez les produits et leurs points attribués</p>
+  </div>
+
+  <button type="button" class="primary-btn" (click)="openForm()">+ Ajouter un produit</button>
+</section>
+
+<section class="panel">
+  <table>
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Type</th>
+        <th>Points attribués</th>
+        <th>Promotion</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (product of products; track product.id) {
+        <tr>
+          <td class="strong">{{ product.name }}</td>
+          <td><span class="tag tag--{{ product.productType.toLowerCase() }}">{{ labels[product.productType] }}</span></td>
+          <td class="points">{{ product.productPoint }} pts</td>
+          <td>
+            <button type="button" class="switch" [class.is-on]="product.promotion" (click)="togglePromotion(product)">
+              <span class="switch__thumb"></span>
+            </button>
+          </td>
+          <td class="actions">
+            <button type="button" class="icon-btn" (click)="openForm(product)">✎</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+@if (showForm) {
+  <div class="modal-backdrop">
+    <div class="modal">
+      <h2>{{ editingId !== null ? 'Modifier le produit' : 'Ajouter un produit' }}</h2>
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="form-grid">
+        <label>
+          <span>Nom</span>
+          <input type="text" formControlName="name" placeholder="Nom du produit" />
+        </label>
+        <label>
+          <span>Type</span>
+          <select formControlName="productType">
+            <option value="REPAS">REPAS</option>
+            <option value="DESSERT">DESSERT</option>
+            <option value="BOISSON">BOISSON</option>
+          </select>
+        </label>
+        <label>
+          <span>Points</span>
+          <input type="number" formControlName="productPoint" placeholder="Points attribués" />
+        </label>
+        @if (errorMessage) {
+          <p class="error-msg">{{ errorMessage }}</p>
+        }
+        <div class="modal__actions">
+          <button type="submit" class="primary-btn" [disabled]="productForm.invalid">Enregistrer</button>
+          <button type="button" class="secondary-btn" (click)="closeForm()">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

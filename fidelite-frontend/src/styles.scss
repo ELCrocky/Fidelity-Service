@@ -1,5 +1,31 @@
 @use './styles/variables' as *;
 
+:root {
+  --primary:        #F97316;
+  --primary-dark:   #EA6C00;
+  --primary-light:  #FFF5EB;
+  --sidebar:        #1B2A4A;
+  --surface:        #FFFFFF;
+  --bg:             #F8F9FA;
+  --text:           #1C1C1C;
+  --text-muted:     #6B7280;
+  --border:         #E5E7EB;
+  --success:        #22C55E;
+  --danger:         #EF4444;
+  --surface-elevated: color-mix(in srgb, var(--surface) 94%, var(--bg));
+  --surface-soft: color-mix(in srgb, var(--bg) 88%, var(--surface));
+  --surface-strong: color-mix(in srgb, var(--surface) 82%, var(--text));
+  --text-strong: color-mix(in srgb, var(--text) 92%, black);
+  --text-soft: color-mix(in srgb, var(--text-muted) 82%, var(--text));
+  --border-soft: color-mix(in srgb, var(--border) 88%, var(--text));
+  --shadow-color: color-mix(in srgb, var(--text) 16%, transparent);
+  --sidebar-strong: color-mix(in srgb, var(--sidebar) 80%, black);
+  --sidebar-hover: color-mix(in srgb, var(--surface) 10%, transparent);
+  --sidebar-active: color-mix(in srgb, var(--primary) 82%, var(--sidebar));
+  --table-hover: color-mix(in srgb, var(--primary-light) 62%, var(--surface));
+  --badge-soft: color-mix(in srgb, var(--bg) 84%, var(--surface));
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -7,6 +33,6 @@
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background-color: $cream;
-  color: $text;
+  background: var(--bg);
+  color: var(--text);
 }

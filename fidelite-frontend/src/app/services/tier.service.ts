@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { Tier, TierRequest } from '../core/models/tier.model';
 
 @Injectable({ providedIn: 'root' })

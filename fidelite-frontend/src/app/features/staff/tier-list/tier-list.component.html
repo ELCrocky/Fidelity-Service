@@ -1,0 +1,47 @@
+<!-- Loyalty tier management with inline edit mode. -->
+<section class="page-head">
+  <div>
+    <h1>Niveaux de fidélité</h1>
+    <p>Définissez les seuils et multiplicateurs de chaque niveau</p>
+  </div>
+</section>
+
+<section class="tiers-stack">
+  @for (tier of tiers; track tier.id) {
+    <article class="tier-card" [class.is-editing]="editingId === tier.id">
+      <div class="tier-card__badge">{{ tier.medal }}</div>
+      @if (editingId !== tier.id) {
+        <div class="tier-card__content">
+          <div>
+            <h2>{{ tier.name }}</h2>
+            <p>À partir de {{ tier.minPoints }} pts</p>
+          </div>
+          <div class="tier-card__meta">Multiplicateur <span>x{{ tier.multiplier }}</span></div>
+          <button type="button" class="secondary-btn" (click)="startEdit(tier.id)">Modifier</button>
+        </div>
+      } @else {
+        <div class="tier-card__content tier-card__content--edit">
+          <div>
+            <h2>{{ tier.name }}</h2>
+            <div class="edit-row">
+              <label>
+                <span>Points min.</span>
+                <input type="number" [value]="tier.minPoints" />
+              </label>
+              <label>
+                <span>Multiplicateur</span>
+                <input type="number" step="0.1" [value]="tier.multiplier" />
+              </label>
+            </div>
+          </div>
+          <div class="edit-actions">
+            <button type="button" class="primary-btn">Sauvegarder</button>
+            <button type="button" class="secondary-btn" (click)="cancel()">Annuler</button>
+          </div>
+        </div>
+      }
+    </article>
+  }
+</section>
+
+<p class="note">Les clients progressent automatiquement vers le niveau supérieur lorsqu'ils atteignent le seuil de points requis.</p>

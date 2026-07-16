@@ -1,12 +1,16 @@
-$primary: #F97316;
-$navy: #1B2A4A;
-$cream: #FFFBF5;
-$border: #E5E7EB;
-$text: #1C1C1C;
-$text-muted: #6B7280;
-$success: #22C55E;
-$danger: #EF4444;
+// ─── couleurs : pont vers les CSS custom properties (theming runtime) ───
+$primary:       var(--primary);
+$primary-dark:  var(--primary-dark);
+$primary-light: var(--primary-light);
+$navy:          var(--sidebar);
+$cream:         var(--bg);
+$text:          var(--text);
+$text-muted:    var(--text-muted);
+$border:        var(--border);
+$success:       var(--success);
+$danger:        var(--danger);
 
+// ─── constantes hors thème (valeurs fixes) ───
 $sidebar-width: 240px;
 $card-radius: 16px;
 $card-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);

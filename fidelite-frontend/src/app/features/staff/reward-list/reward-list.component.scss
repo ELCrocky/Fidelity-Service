@@ -1,0 +1,167 @@
+@use '../../../../styles/variables' as *;
+.page-head--actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* Reward card grid and modal styling. */
+.page-head h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #21304f;
+}
+
+.page-head p {
+  margin: 6px 0 0;
+  color: $text-muted;
+}
+
+.primary-btn,
+.secondary-btn,
+.ghost-icon {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.primary-btn {
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: $primary;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 10px 20px rgba(255, 122, 26, 0.22);
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.reward-card {
+  position: relative;
+  min-height: 180px;
+  padding: 20px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid rgba(209, 217, 229, 0.8);
+  box-shadow: 0 8px 20px rgba(25, 42, 74, 0.08);
+}
+
+.reward-card__icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #fff4e8;
+  font-size: 20px;
+}
+
+.reward-card__top-actions {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  display: flex;
+  gap: 8px;
+}
+
+.ghost-icon {
+  background: transparent;
+  color: $text-muted;
+}
+
+.reward-card h2 {
+  margin: 16px 0 8px;
+  color: #21304f;
+  font-size: 18px;
+}
+
+.reward-card p {
+  margin: 0;
+  color: $text-muted;
+  line-height: 1.5;
+}
+
+.reward-card__points {
+  margin-top: 22px;
+  color: $primary;
+  font-weight: 800;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(19, 29, 46, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.modal {
+  width: min(520px, 100%);
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+}
+
+.modal h2 {
+  margin: 0 0 18px;
+  color: #21304f;
+}
+
+.form-grid {
+  display: grid;
+  gap: 14px;
+}
+
+label span {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  color: #334155;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid $border;
+  font: inherit;
+  color: #1f2d49;
+  outline: 0;
+  background: #fafcff;
+  resize: vertical;
+}
+
+.modal__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.secondary-btn {
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: #eef2f7;
+  color: #475569;
+  font-weight: 700;
+}
+
+@media (max-width: 1120px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
