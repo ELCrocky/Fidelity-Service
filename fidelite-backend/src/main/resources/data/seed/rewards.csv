@@ -1,0 +1,10 @@
+id,name,costPoints,merchant
+(generated),Café Offert,100,comptoir
+(generated),-10% Prochaine Addition,200,comptoir
+(generated),Menu du Jour Offert,500,comptoir
+(generated),Maki Offert,150,sakura
+(generated),Thé Vert Offert,80,sakura
+(generated),Plateau Sushi Offert,600,sakura
+(generated),Frites Offertes,120,burgerhouse
+(generated),Milkshake Offert,150,burgerhouse
+(generated),Menu Méga Burger Offert,450,burgerhouse

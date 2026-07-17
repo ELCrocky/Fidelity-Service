@@ -12,7 +12,7 @@
   margin: 0;
   font-size: 28px;
   font-weight: 800;
-  color: #21304f;
+  color: var(--text-strong);
 }
 
 .page-head p {
@@ -42,9 +42,9 @@
   margin-top: 24px;
   overflow: hidden;
   border-radius: 20px;
-  background: #fff;
-  border: 1px solid rgba(209, 217, 229, 0.8);
-  box-shadow: 0 8px 20px rgba(25, 42, 74, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 8px 20px var(--shadow-color);
 }
 
 table {
@@ -54,7 +54,7 @@ table {
 
 th, td {
   padding: 18px 22px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 84%, var(--surface));
   text-align: left;
 }
 
@@ -66,7 +66,7 @@ th {
 
 .strong {
   font-weight: 700;
-  color: #1f2d49;
+  color: var(--text-strong);
 }
 
 .tag {
@@ -79,13 +79,13 @@ th {
   font-weight: 700;
 }
 
-.tag--repas { background: #eef4ff; color: #2f58f6; border-color: #c8d7ff; }
-.tag--dessert { background: #fff0f6; color: #e91e63; border-color: #ffd0e0; }
-.tag--boisson { background: #ecfbfb; color: #0f9f9f; border-color: #bfeeed; }
+.tag--repas   { background: color-mix(in srgb, #3b82f6 12%, var(--surface)); color: #2f58f6; border-color: color-mix(in srgb, #3b82f6 30%, var(--border)); }
+.tag--dessert { background: color-mix(in srgb, #e91e63 12%, var(--surface)); color: #e91e63; border-color: color-mix(in srgb, #e91e63 30%, var(--border)); }
+.tag--boisson { background: color-mix(in srgb, #0f9f9f 12%, var(--surface)); color: #0f9f9f; border-color: color-mix(in srgb, #0f9f9f 30%, var(--border)); }
 
 .points {
   font-weight: 700;
-  color: #1f2d49;
+  color: var(--text-strong);
 }
 
 .switch {
@@ -93,7 +93,7 @@ th {
   height: 24px;
   padding: 3px;
   border-radius: 999px;
-  background: #e2e8f0;
+  background: var(--border);
   position: relative;
 }
 
@@ -106,7 +106,7 @@ th {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--surface);
   transform: translateX(0);
   transition: transform 0.2s ease;
 }
@@ -136,7 +136,7 @@ th {
 
 .modal {
   width: min(520px, 100%);
-  background: #fff;
+  background: var(--surface);
   border-radius: 24px;
   padding: 24px;
   box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
@@ -144,7 +144,7 @@ th {
 
 .modal h2 {
   margin: 0 0 18px;
-  color: #21304f;
+  color: var(--text-strong);
 }
 
 .form-grid {
@@ -156,7 +156,7 @@ label span {
   display: block;
   margin-bottom: 6px;
   font-weight: 700;
-  color: #334155;
+  color: var(--text);
 }
 
 input, select {
@@ -165,9 +165,9 @@ input, select {
   border-radius: 14px;
   border: 1px solid $border;
   font: inherit;
-  color: #1f2d49;
+  color: var(--text);
   outline: 0;
-  background: #fafcff;
+  background: var(--surface-soft);
 }
 
 .modal__actions {
@@ -179,8 +179,8 @@ input, select {
 .secondary-btn {
   padding: 12px 18px;
   border-radius: 14px;
-  background: #eef2f7;
-  color: #475569;
+  background: var(--badge-soft);
+  color: var(--text);
   font-weight: 700;
 }
 

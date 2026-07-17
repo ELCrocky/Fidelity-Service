@@ -4,7 +4,7 @@
 	margin: 0;
 	font-size: 28px;
 	font-weight: 800;
-	color: #21304f;
+	color: var(--text-strong);
 }
 
 /* Dashboard card and table styling. */
@@ -24,9 +24,9 @@
 .stat-card {
 	padding: 20px;
 	border-radius: 20px;
-	background: #fff;
-	box-shadow: 0 8px 20px rgba(25, 42, 74, 0.08);
-	border: 1px solid rgba(209, 217, 229, 0.8);
+	background: var(--surface);
+	box-shadow: 0 8px 20px var(--shadow-color);
+	border: 1px solid var(--border-soft);
 }
 
 .stat-card__icon {
@@ -36,17 +36,17 @@
 	display: grid;
 	place-items: center;
 	margin-bottom: 18px;
-	background: #eff6ff;
+	background: color-mix(in srgb, #3b82f6 12%, var(--surface));
 }
 
-.stat-card[data-tone='green'] .stat-card__icon { background: #ecfdf5; }
-.stat-card[data-tone='orange'] .stat-card__icon { background: #fff7ed; }
-.stat-card[data-tone='purple'] .stat-card__icon { background: #f5f3ff; }
+.stat-card[data-tone='green']  .stat-card__icon { background: color-mix(in srgb, var(--success) 14%, var(--surface)); }
+.stat-card[data-tone='orange'] .stat-card__icon { background: color-mix(in srgb, var(--primary) 12%, var(--surface)); }
+.stat-card[data-tone='purple'] .stat-card__icon { background: color-mix(in srgb, #8b5cf6 12%, var(--surface)); }
 
 .stat-card__value {
 	font-size: 28px;
 	font-weight: 800;
-	color: #233254;
+	color: var(--text-strong);
 }
 
 .stat-card__label {
@@ -64,9 +64,9 @@
 .panel {
 	border-radius: 20px;
 	overflow: hidden;
-	background: #fff;
-	box-shadow: 0 8px 20px rgba(25, 42, 74, 0.08);
-	border: 1px solid rgba(209, 217, 229, 0.8);
+	background: var(--surface);
+	box-shadow: 0 8px 20px var(--shadow-color);
+	border: 1px solid var(--border-soft);
 }
 
 .panel__head {
@@ -74,13 +74,13 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 18px 22px;
-	border-bottom: 1px solid #eef2f7;
+	border-bottom: 1px solid color-mix(in srgb, var(--border) 84%, var(--surface));
 }
 
 .panel__head h2 {
 	margin: 0;
 	font-size: 18px;
-	color: #21304f;
+	color: var(--text-strong);
 }
 
 .panel__head span {
@@ -99,7 +99,7 @@ table {
 th, td {
 	padding: 16px 22px;
 	text-align: left;
-	border-bottom: 1px solid #f1f5f9;
+	border-bottom: 1px solid color-mix(in srgb, var(--border) 84%, var(--surface));
 }
 
 th {
@@ -109,12 +109,12 @@ th {
 }
 
 td {
-	color: #475569;
+	color: var(--text);
 }
 
 .strong {
 	font-weight: 700;
-	color: #1f2d49;
+	color: var(--text-strong);
 }
 
 .badge {
@@ -122,15 +122,15 @@ td {
 	align-items: center;
 	padding: 4px 8px;
 	border-radius: 999px;
-	background: #e6f8ef;
+	background: color-mix(in srgb, var(--success) 14%, var(--surface));
 	color: $success;
 	font-size: 12px;
 	font-weight: 700;
 }
 
 .badge.is-redeem {
-	background: #fff1e8;
-	color: #ef6c00;
+	background: color-mix(in srgb, var(--primary) 14%, var(--surface));
+	color: $primary;
 }
 
 .points {

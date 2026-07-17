@@ -11,7 +11,7 @@
   margin: 0;
   font-size: 28px;
   font-weight: 800;
-  color: #21304f;
+  color: var(--text-strong);
 }
 
 .page-head p {
@@ -48,9 +48,9 @@
   min-height: 180px;
   padding: 20px;
   border-radius: 20px;
-  background: #fff;
-  border: 1px solid rgba(209, 217, 229, 0.8);
-  box-shadow: 0 8px 20px rgba(25, 42, 74, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 8px 20px var(--shadow-color);
 }
 
 .reward-card__icon {
@@ -59,7 +59,7 @@
   display: grid;
   place-items: center;
   border-radius: 14px;
-  background: #fff4e8;
+  background: color-mix(in srgb, var(--primary) 12%, var(--surface));
   font-size: 20px;
 }
 
@@ -78,7 +78,7 @@
 
 .reward-card h2 {
   margin: 16px 0 8px;
-  color: #21304f;
+  color: var(--text-strong);
   font-size: 18px;
 }
 
@@ -105,7 +105,7 @@
 
 .modal {
   width: min(520px, 100%);
-  background: #fff;
+  background: var(--surface);
   border-radius: 24px;
   padding: 24px;
   box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
@@ -113,7 +113,7 @@
 
 .modal h2 {
   margin: 0 0 18px;
-  color: #21304f;
+  color: var(--text-strong);
 }
 
 .form-grid {
@@ -125,7 +125,7 @@ label span {
   display: block;
   margin-bottom: 6px;
   font-weight: 700;
-  color: #334155;
+  color: var(--text);
 }
 
 input, textarea {
@@ -134,9 +134,9 @@ input, textarea {
   border-radius: 14px;
   border: 1px solid $border;
   font: inherit;
-  color: #1f2d49;
+  color: var(--text);
   outline: 0;
-  background: #fafcff;
+  background: var(--surface-soft);
   resize: vertical;
 }
 
@@ -149,8 +149,8 @@ input, textarea {
 .secondary-btn {
   padding: 12px 18px;
   border-radius: 14px;
-  background: #eef2f7;
-  color: #475569;
+  background: var(--badge-soft);
+  color: var(--text);
   font-weight: 700;
 }
 

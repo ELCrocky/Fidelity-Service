@@ -1,0 +1,7 @@
+id,email,passwordHash,role,merchantId
+(generated),admin@comptoir.fr,BCrypt(Password123!),MERCHANT_ADMIN,comptoir
+(generated),kasiyer@comptoir.fr,BCrypt(Password123!),STAFF,comptoir
+(generated),admin@sakura.fr,BCrypt(Password123!),MERCHANT_ADMIN,sakura
+(generated),kasiyer@sakura.fr,BCrypt(Password123!),STAFF,sakura
+(generated),admin@burgerhouse.fr,BCrypt(Password123!),MERCHANT_ADMIN,burgerhouse
+(generated),kasiyer@burgerhouse.fr,BCrypt(Password123!),STAFF,burgerhouse

@@ -3,7 +3,7 @@
   margin: 0;
   font-size: 28px;
   font-weight: 800;
-  color: #21304f;
+  color: var(--text-strong);
 }
 
 /* Tier list cards and inline edit layout. */
@@ -25,9 +25,9 @@
   align-items: center;
   padding: 18px 20px;
   border-radius: 20px;
-  background: #fff;
-  border: 1px solid rgba(209, 217, 229, 0.8);
-  box-shadow: 0 8px 20px rgba(25, 42, 74, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 8px 20px var(--shadow-color);
 }
 
 .tier-card.is-editing {
@@ -41,8 +41,8 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #f7d9b7;
-  color: #7c4b00;
+  background: color-mix(in srgb, #f7d9b7 70%, var(--surface));
+  color: color-mix(in srgb, #7c4b00 80%, var(--text));
   font-weight: 800;
 }
 
@@ -55,7 +55,7 @@
 
 .tier-card h2 {
   margin: 0;
-  color: #21304f;
+  color: var(--text-strong);
 }
 
 .tier-card p {
@@ -82,8 +82,8 @@
 .secondary-btn {
   padding: 12px 18px;
   border-radius: 14px;
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--badge-soft);
+  color: var(--text);
   font-weight: 700;
 }
 
@@ -120,6 +120,8 @@ input {
   border-radius: 14px;
   border: 1px solid $border;
   font: inherit;
+  background: var(--surface-soft);
+  color: var(--text);
 }
 
 .edit-actions {

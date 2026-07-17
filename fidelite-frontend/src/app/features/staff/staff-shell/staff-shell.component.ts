@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { ThemeService } from '../../../services/theme.service';
 
-// Staff shell layout with sidebar navigation, operator profile, and routed content.
 @Component({
   selector: 'app-staff-shell',
   standalone: true,
@@ -13,6 +13,7 @@ import { AuthService } from '../../../services/auth.service';
 export class StaffShellComponent {
   private readonly _authService = inject(AuthService);
   private readonly _router = inject(Router);
+  protected readonly themeService = inject(ThemeService);
 
   protected readonly navItems = [
     { label: 'Tableau de bord', route: '/staff', icon: 'grid' },

@@ -24,6 +24,43 @@
   --sidebar-active: color-mix(in srgb, var(--primary) 82%, var(--sidebar));
   --table-hover: color-mix(in srgb, var(--primary-light) 62%, var(--surface));
   --badge-soft: color-mix(in srgb, var(--bg) 84%, var(--surface));
+  --sidebar-text: rgba(255, 255, 255, 0.92);
+  --sidebar-text-soft: rgba(255, 255, 255, 0.58);
+  --sidebar-accent: color-mix(in srgb, var(--primary) 65%, rgba(255, 255, 255, 0.85));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary:       #F97316;
+    --primary-dark:  #EA6C00;
+    --primary-light: rgba(249, 115, 22, 0.18);
+    --sidebar:       #060F1E;
+    --bg:            #0D1B2A;
+    --surface:       #142030;
+    --text:          #E0EAF5;
+    --text-muted:    #8090A8;
+    --border:        #1C3050;
+    --success:       #4ADE80;
+    --danger:        #F87171;
+    --shadow-color:  rgba(0, 0, 0, 0.35);
+    --table-hover:   color-mix(in srgb, var(--primary) 12%, var(--surface));
+  }
+}
+
+[data-theme="dark"] {
+  --primary:       #F97316;
+  --primary-dark:  #EA6C00;
+  --primary-light: rgba(249, 115, 22, 0.18);
+  --sidebar:       #060F1E;
+  --bg:            #0D1B2A;
+  --surface:       #142030;
+  --text:          #E0EAF5;
+  --text-muted:    #8090A8;
+  --border:        #1C3050;
+  --success:       #4ADE80;
+  --danger:        #F87171;
+  --shadow-color:  rgba(0, 0, 0, 0.35);
+  --table-hover:   color-mix(in srgb, var(--primary) 12%, var(--surface));
 }
 
 *, *::before, *::after {

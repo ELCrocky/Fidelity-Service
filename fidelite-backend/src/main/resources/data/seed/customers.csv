@@ -1,0 +1,16 @@
+id,nom,prenom,email,phone,dateNaissance,marketingConsent,merchant,tier
+(generated),Dupont,Marie,marie.dupont@email.fr,0611110001,1990-04-12,true,comptoir,Gold
+(generated),Martin,Jean-Pierre,jp.martin@gmail.com,0611110002,1985-11-03,true,comptoir,Silver
+(generated),Leclerc,Sophie,sophie.l@outlook.fr,0611110003,1998-07-22,false,comptoir,Bronze
+(generated),Rousseau,Antoine,a.rousseau@free.fr,0611110004,1992-01-30,true,comptoir,Silver
+(generated),Bernard,Isabelle,isa.bernard@sfr.fr,0611110005,1988-09-15,true,comptoir,Gold
+(generated),Tanaka,Yuki,yuki.tanaka@email.fr,0622220001,1993-05-18,true,sakura,Gold
+(generated),Petit,Thomas,t.petit@laposte.net,0622220002,2000-02-28,false,sakura,Bronze
+(generated),Moreau,Céline,c.moreau@orange.fr,0622220003,1995-06-19,true,sakura,Silver
+(generated),Girard,Nicolas,n.girard@gmail.com,0622220004,1991-12-05,true,sakura,Gold
+(generated),Fontaine,Julie,j.fontaine@yahoo.fr,0622220005,1997-03-27,false,sakura,Bronze
+(generated),Lambert,Kevin,kevin.lambert@email.fr,0633330001,1994-08-09,true,burgerhouse,Silver
+(generated),Simon,Laura,laura.simon@gmail.com,0633330002,1999-10-14,true,burgerhouse,Gold
+(generated),Michel,Alexandre,a.michel@outlook.fr,0633330003,1987-04-02,false,burgerhouse,Bronze
+(generated),Garcia,Manon,manon.garcia@free.fr,0633330004,1996-11-21,true,burgerhouse,Gold
+(generated),David,Lucas,lucas.david@sfr.fr,0633330005,1989-07-08,true,burgerhouse,Bronze

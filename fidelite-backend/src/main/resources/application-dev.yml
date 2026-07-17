@@ -1,0 +1,2 @@
+jwt:
+  secret: dev-secret-key-fidelite-2026-change-in-production-min-256bits

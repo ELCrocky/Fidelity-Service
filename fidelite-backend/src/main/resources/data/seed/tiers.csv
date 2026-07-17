@@ -1,0 +1,10 @@
+id,name,minPoints,multiplier,merchant
+(identity),Bronze,0,1.0,comptoir
+(identity),Silver,500,1.25,comptoir
+(identity),Gold,1000,1.5,comptoir
+(identity),Bronze,0,1.0,sakura
+(identity),Silver,600,1.3,sakura
+(identity),Gold,1200,1.6,sakura
+(identity),Bronze,0,1.0,burgerhouse
+(identity),Silver,400,1.2,burgerhouse
+(identity),Gold,900,1.4,burgerhouse

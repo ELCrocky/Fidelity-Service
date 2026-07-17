@@ -1,0 +1,17 @@
+id,barcodeEan13,pointsBalance,status,customer
+(generated),CPT-2024-001,1240,ACTIVE,marie.dupont
+(generated),CPT-2024-002,580,ACTIVE,jp.martin
+(generated),CPT-2024-003,210,ACTIVE,sophie.l
+(generated),CPT-2024-004,890,BLOCKED,a.rousseau
+(generated),CPT-2024-005,1650,ACTIVE,isa.bernard
+(generated),SAK-2024-001,1320,ACTIVE,yuki.tanaka
+(generated),SAK-2024-002,95,ACTIVE,t.petit
+(generated),SAK-2024-003,720,ACTIVE,c.moreau
+(generated),SAK-2024-004,1980,ACTIVE,n.girard
+(generated),SAK-2024-005,340,ACTIVE,j.fontaine
+(generated),BGH-2024-001,460,ACTIVE,kevin.lambert
+(generated),BGH-2024-002,1050,ACTIVE,laura.simon
+(generated),BGH-2024-003,180,ACTIVE,a.michel
+(generated),BGH-2024-004,920,BLOCKED,manon.garcia
+(generated),BGH-2024-005,60,ACTIVE,lucas.david
+# Note: INACTIVE does not exist in CardStatus enum — replaced with BLOCKED

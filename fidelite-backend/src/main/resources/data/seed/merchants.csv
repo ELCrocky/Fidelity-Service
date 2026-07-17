@@ -1,0 +1,4 @@
+id,name,apiKey,city,region,status,createdAt
+(generated-by-hibernate),Le Comptoir Français,ak_live_comptoir_a1b2c3,Valence,Auvergne-Rhône-Alpes,ACTIVE,2026-03-01T09:00:00
+(generated-by-hibernate),Sushi Sakura,ak_live_sakura_d4e5f6,Lyon,Auvergne-Rhône-Alpes,ACTIVE,2026-03-05T09:00:00
+(generated-by-hibernate),Burger House,ak_live_burgerhouse_g7h8i9,Grenoble,Auvergne-Rhône-Alpes,ACTIVE,2026-03-10T09:00:00

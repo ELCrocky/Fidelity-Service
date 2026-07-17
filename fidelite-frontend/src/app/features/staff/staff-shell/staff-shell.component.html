@@ -22,6 +22,23 @@
 
 		<div class="spacer"></div>
 
+		<div class="appearance">
+			<div class="appearance__label">APPARENCE</div>
+			<div class="scheme-toggle">
+				<button type="button" class="scheme-btn"
+						[class.is-active]="themeService.scheme() === 'light'"
+						(click)="themeService.setScheme('light')">☀ Clair</button>
+				<button type="button" class="scheme-btn"
+						[class.is-active]="themeService.scheme() === 'dark'"
+						(click)="themeService.setScheme('dark')">🌙 Sombre</button>
+			</div>
+			<div class="appearance__label">COULEUR</div>
+			<label class="color-pick" [style.background]="themeService.primary()" title="Choisir une couleur">
+				<input type="color" [value]="themeService.primary()"
+					   (input)="themeService.setPrimary($any($event.target).value)">
+			</label>
+		</div>
+
 		<div class="profile-card">
 			<div class="profile-card__avatar">{{ operator.initials }}</div>
 			<div>

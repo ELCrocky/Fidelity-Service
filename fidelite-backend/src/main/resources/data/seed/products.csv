@@ -1,0 +1,16 @@
+id,name,productType,productPoint,promotion,merchant
+(identity),Menu du Jour,REPAS,120,false,comptoir
+(identity),Steak Frites,REPAS,140,false,comptoir
+(identity),Tarte Tatin,DESSERT,40,false,comptoir
+(identity),Verre de Vin,BOISSON,25,false,comptoir
+(identity),Menu Découverte Promo,REPAS,160,true,comptoir
+(identity),Plateau Sushi Saumon,REPAS,150,false,sakura
+(identity),Maki California,REPAS,90,false,sakura
+(identity),Mochi Glacé,DESSERT,35,false,sakura
+(identity),Thé Vert,BOISSON,15,false,sakura
+(identity),Menu Duo Sushi Promo,REPAS,200,true,sakura
+(identity),Burger Classic,REPAS,90,false,burgerhouse
+(identity),Burger Bacon Cheese,REPAS,110,false,burgerhouse
+(identity),Frites Maison,DESSERT,30,false,burgerhouse
+(identity),Milkshake,BOISSON,35,false,burgerhouse
+(identity),Menu Méga Burger Promo,REPAS,180,true,burgerhouse

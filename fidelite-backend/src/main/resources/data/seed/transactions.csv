@@ -1,0 +1,13 @@
+id,points,type,idempotencyKey,createdAt,card
+(identity),120,EARN,seed-tx-c001,2026-07-10T12:15:00,CPT-2024-001
+(identity),-200,REDEEM,seed-tx-c002,2026-07-08T13:40:00,CPT-2024-001
+(identity),140,EARN,seed-tx-c003,2026-07-09T19:20:00,CPT-2024-002
+(identity),40,EARN,seed-tx-c004,2026-07-11T09:00:00,CPT-2024-003
+(identity),150,EARN,seed-tx-c005,2026-07-10T12:30:00,SAK-2024-001
+(identity),-150,REDEEM,seed-tx-c006,2026-07-09T18:45:00,SAK-2024-001
+(identity),90,EARN,seed-tx-c007,2026-07-11T13:10:00,SAK-2024-003
+(identity),200,EARN,seed-tx-c008,2026-07-08T20:00:00,SAK-2024-004
+(identity),90,EARN,seed-tx-c009,2026-07-10T13:00:00,BGH-2024-001
+(identity),110,EARN,seed-tx-c010,2026-07-11T12:45:00,BGH-2024-002
+(identity),-120,REDEEM,seed-tx-c011,2026-07-09T14:20:00,BGH-2024-002
+(identity),35,EARN,seed-tx-c012,2026-07-10T19:15:00,BGH-2024-003
