@@ -1,4 +1,4 @@
-# Royalty Service
+# Loyalty Service
 
 A multi-tenant loyalty card (carte de fidélité) system built for kiosk and point-of-sale use, designed to be integrated into any business — from a single independent shop to a nationwide franchise. Beyond issuing and redeeming points, the system includes a **clearing layer** that settles the financial imbalance points create between branches, so that no branch ever has to invoice another directly.
 
