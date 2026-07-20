@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 // REST controller for customer management scoped to a merchant.
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/api/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 

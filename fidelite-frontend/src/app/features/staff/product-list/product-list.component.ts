@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../services/product.service';
+import { TokenStorageService } from '../../../services/token-storage.service';
 
 // Product management: table with promotion toggle, create/edit modal backed by ProductService.
 @Component({
@@ -14,20 +15,10 @@ import { ProductService } from '../../../services/product.service';
 export class ProductListComponent implements OnInit {
   private readonly _fb = inject(NonNullableFormBuilder);
   private readonly _productService = inject(ProductService);
+  private readonly _tokenStorage = inject(TokenStorageService);
+  private readonly _cdr = inject(ChangeDetectorRef);
 
-  // TODO: replace mock data with load() once backend is wired
-  protected products: Product[] = [
-    { id: 1, name: 'Menu Déjeuner', productType: 'REPAS', productPoint: 120, promotion: false },
-    { id: 2, name: 'Menu Famille', productType: 'REPAS', productPoint: 90, promotion: true },
-    { id: 3, name: 'Burger Classic', productType: 'REPAS', productPoint: 60, promotion: false },
-    { id: 4, name: 'Salade César', productType: 'REPAS', productPoint: 80, promotion: false },
-    { id: 5, name: 'Dessert du Jour', productType: 'DESSERT', productPoint: 45, promotion: false },
-    { id: 6, name: 'Plateau Fromages', productType: 'DESSERT', productPoint: 110, promotion: true },
-    { id: 7, name: 'Tarte Tatin', productType: 'DESSERT', productPoint: 55, promotion: false },
-    { id: 8, name: 'Café Espresso', productType: 'BOISSON', productPoint: 20, promotion: false },
-    { id: 9, name: 'Jus Pressé', productType: 'BOISSON', productPoint: 35, promotion: true },
-    { id: 10, name: 'Smoothie Maison', productType: 'BOISSON', productPoint: 40, promotion: false }
-  ];
+  protected products: Product[] = [];
 
   protected showForm = false;
   protected editingId: number | null = null;
@@ -47,11 +38,29 @@ export class ProductListComponent implements OnInit {
   } as const;
 
   ngOnInit(): void {
-    // TODO: call this._productService.getByMerchant(merchantId) here once backend is wired
+    const merchantId = this._tokenStorage.getMerchantId();
+    if (!merchantId) return;
+    this._productService.getByMerchant(merchantId).subscribe({
+      next: (products) => { this.products = products; this._cdr.detectChanges(); },
+      error: () => this.errorMessage = 'Impossible de charger les produits.'
+    });
   }
 
   protected togglePromotion(product: Product): void {
-    product.promotion = !product.promotion;
+    const newValue = !product.promotion;
+    const request = {
+      name: product.name,
+      productType: product.productType,
+      productPoint: product.productPoint,
+      promotion: newValue,
+      merchantId: this._tokenStorage.getMerchantId() ?? ''
+    };
+    this._productService.update(product.id, request).subscribe({
+      next: (updated) => {
+        product.promotion = updated.promotion;
+        this._cdr.detectChanges();
+      }
+    });
   }
 
   protected openForm(product?: Product): void {
@@ -81,8 +90,7 @@ export class ProductListComponent implements OnInit {
   protected onSubmit(): void {
     if (this.productForm.invalid) return;
     const value = this.productForm.getRawValue();
-    // TODO: replace '' with TokenStorageService.getMerchantId() once available
-    const request = { ...value, merchantId: '' };
+    const request = { ...value, merchantId: this._tokenStorage.getMerchantId() ?? '' };
 
     if (this.editingId !== null) {
       this._productService.update(this.editingId, request).subscribe({

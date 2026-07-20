@@ -6,6 +6,7 @@ export interface Customer{
     phone: string;
     dateNaissance: string;
     marketingConsent: boolean;
+    tierName?: string;
 }
 
 export interface CustomerRequest{

@@ -1,39 +1,51 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { TierService } from '../../../services/tier.service';
+import { TokenStorageService } from '../../../services/token-storage.service';
+import { Tier } from '../../../core/models/tier.model';
 
-// Loyalty tier list with inline edit state for threshold and multiplier.
-interface StaffTier {
-  id: number;
-  name: string;
-  minPoints: number;
-  multiplier: number;
+interface StaffTier extends Tier {
   medal: string;
 }
+
 @Component({
   selector: 'app-tier-list',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './tier-list.component.html',
   styleUrl: './tier-list.component.scss'
 })
-export class TierListComponent {
+export class TierListComponent implements OnInit {
+  private readonly _tierService = inject(TierService);
+  private readonly _tokenStorage = inject(TokenStorageService);
+  private readonly _cdr = inject(ChangeDetectorRef);
+
   protected showForm = false;
   protected editingId: number | null = null;
+  protected tiers: StaffTier[] = [];
 
-  // TODO: replace with TierService.getByMerchant(merchantId), sorted by minPoints asc
-  protected readonly tiers: StaffTier[] = [
-    { id: 1, name: 'Bronze', minPoints: 0, multiplier: 1, medal: '3' },
-    { id: 2, name: 'Silver', minPoints: 300, multiplier: 1.5, medal: '2' },
-    { id: 3, name: 'Gold', minPoints: 800, multiplier: 2, medal: '1' }
-  ];
+  ngOnInit(): void {
+    const merchantId = this._tokenStorage.getMerchantId();
+    if (!merchantId) return;
+    this._tierService.getByMerchant(merchantId).subscribe({
+      next: (tiers) => {
+        const sorted = [...tiers].sort((a, b) => a.minPoints - b.minPoints);
+        this.tiers = sorted.map((t, i) => ({
+          ...t,
+          multiplier: Number(t.multiplier),
+          medal: String(sorted.length - i)
+        }));
+        this._cdr.detectChanges();
+      }
+    });
+  }
 
-  // Puts one tier into inline edit mode.
   protected startEdit(id: number): void {
     this.editingId = id;
     this.showForm = true;
   }
 
-  // Cancels the inline edit state.
   protected cancel(): void {
     this.showForm = false;
     this.editingId = null;

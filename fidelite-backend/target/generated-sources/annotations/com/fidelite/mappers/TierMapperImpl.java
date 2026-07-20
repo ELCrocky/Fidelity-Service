@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-17T15:30:16+0300",
-    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
+    date = "2026-07-20T16:25:35+0300",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
 public class TierMapperImpl implements TierMapper {
@@ -23,9 +23,9 @@ public class TierMapperImpl implements TierMapper {
         TierResponseDTO tierResponseDTO = new TierResponseDTO();
 
         tierResponseDTO.setId( tier.getTierID() );
+        tierResponseDTO.setName( tier.getName() );
         tierResponseDTO.setMinPoints( tier.getMinPoints() );
         tierResponseDTO.setMultiplier( tier.getMultiplier() );
-        tierResponseDTO.setName( tier.getName() );
 
         return tierResponseDTO;
     }
@@ -38,9 +38,9 @@ public class TierMapperImpl implements TierMapper {
 
         Tier.TierBuilder tier = Tier.builder();
 
+        tier.name( dto.getName() );
         tier.minPoints( dto.getMinPoints() );
         tier.multiplier( dto.getMultiplier() );
-        tier.name( dto.getName() );
 
         return tier.build();
     }

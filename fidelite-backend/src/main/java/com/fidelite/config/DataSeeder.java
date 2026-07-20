@@ -131,24 +131,24 @@ public class DataSeeder implements ApplicationRunner {
         Tier bSilver = tierRepo.save(Tier.builder().name("Silver").minPoints(400).multiplier(new BigDecimal("1.20")).merchant(burger).build());
         Tier bGold   = tierRepo.save(Tier.builder().name("Gold").minPoints(900).multiplier(new BigDecimal("1.40")).merchant(burger).build());
 
-        // ── 5. Products (no @Builder — use setters) ──────────────────────────
-        productRepo.save(product("Menu du Jour", ProductType.REPAS, 120, false, comptoir));
-        productRepo.save(product("Steak Frites", ProductType.REPAS, 140, false, comptoir));
-        productRepo.save(product("Tarte Tatin", ProductType.DESSERT, 40, false, comptoir));
-        productRepo.save(product("Verre de Vin", ProductType.BOISSON, 25, false, comptoir));
-        productRepo.save(product("Menu Découverte Promo", ProductType.REPAS, 160, true, comptoir));
+        // ── 5. Products ───────────────────────────────────────────────────────
+        Product cMenuJour  = productRepo.save(product("Menu du Jour",         ProductType.REPAS,   120, false, comptoir));
+        Product cSteak     = productRepo.save(product("Steak Frites",         ProductType.REPAS,   140, false, comptoir));
+        Product cTarte     = productRepo.save(product("Tarte Tatin",          ProductType.DESSERT,  40, false, comptoir));
+        Product cVin       = productRepo.save(product("Verre de Vin",         ProductType.BOISSON,  25, false, comptoir));
+        Product cDecouverte= productRepo.save(product("Menu Découverte Promo",ProductType.REPAS,   160, true,  comptoir));
 
-        productRepo.save(product("Plateau Sushi Saumon", ProductType.REPAS, 150, false, sakura));
-        productRepo.save(product("Maki California", ProductType.REPAS, 90, false, sakura));
-        productRepo.save(product("Mochi Glacé", ProductType.DESSERT, 35, false, sakura));
-        productRepo.save(product("Thé Vert", ProductType.BOISSON, 15, false, sakura));
-        productRepo.save(product("Menu Duo Sushi Promo", ProductType.REPAS, 200, true, sakura));
+        Product sSaumon    = productRepo.save(product("Plateau Sushi Saumon", ProductType.REPAS,   150, false, sakura));
+        Product sMaki      = productRepo.save(product("Maki California",      ProductType.REPAS,    90, false, sakura));
+        Product sMochi     = productRepo.save(product("Mochi Glacé",          ProductType.DESSERT,  35, false, sakura));
+        Product sTh        = productRepo.save(product("Thé Vert",             ProductType.BOISSON,  15, false, sakura));
+        productRepo.save(product("Menu Duo Sushi Promo",                       ProductType.REPAS,   200, true,  sakura));
 
-        productRepo.save(product("Burger Classic", ProductType.REPAS, 90, false, burger));
-        productRepo.save(product("Burger Bacon Cheese", ProductType.REPAS, 110, false, burger));
-        productRepo.save(product("Frites Maison", ProductType.DESSERT, 30, false, burger));
-        productRepo.save(product("Milkshake", ProductType.BOISSON, 35, false, burger));
-        productRepo.save(product("Menu Méga Burger Promo", ProductType.REPAS, 180, true, burger));
+        Product bBurger    = productRepo.save(product("Burger Classic",       ProductType.REPAS,    90, false, burger));
+        Product bBacon     = productRepo.save(product("Burger Bacon Cheese",  ProductType.REPAS,   110, false, burger));
+        Product bFrites    = productRepo.save(product("Frites Maison",        ProductType.DESSERT,  30, false, burger));
+        Product bMilk      = productRepo.save(product("Milkshake",            ProductType.BOISSON,  35, false, burger));
+        productRepo.save(product("Menu Méga Burger Promo",                     ProductType.REPAS,   180, true,  burger));
 
         // ── 6. Rewards ───────────────────────────────────────────────────────
         rewardRepo.save(Reward.builder().name("Café Offert").costPoints(100).merchant(comptoir).build());
@@ -214,19 +214,33 @@ public class DataSeeder implements ApplicationRunner {
         ));
 
         // ── 9. Transactions ──────────────────────────────────────────────────
+        // Comptoir — Menu du Jour×5, Verre de Vin×4, Steak Frites×3, Tarte Tatin×2, Menu Découverte×1
         transactionRepo.saveAll(java.util.List.of(
-            tx(120,  TransactionType.EARN,   "seed-tx-c001", LocalDateTime.of(2026, 7, 10, 12, 15), cardMarie),
-            tx(-200, TransactionType.REDEEM, "seed-tx-c002", LocalDateTime.of(2026, 7, 8,  13, 40), cardMarie),
-            tx(140,  TransactionType.EARN,   "seed-tx-c003", LocalDateTime.of(2026, 7, 9,  19, 20), cardJp),
-            tx(40,   TransactionType.EARN,   "seed-tx-c004", LocalDateTime.of(2026, 7, 11, 9,  0),  cardSophie),
-            tx(150,  TransactionType.EARN,   "seed-tx-c005", LocalDateTime.of(2026, 7, 10, 12, 30), cardYuki),
-            tx(-150, TransactionType.REDEEM, "seed-tx-c006", LocalDateTime.of(2026, 7, 9,  18, 45), cardYuki),
-            tx(90,   TransactionType.EARN,   "seed-tx-c007", LocalDateTime.of(2026, 7, 11, 13, 10), cardCeline),
-            tx(200,  TransactionType.EARN,   "seed-tx-c008", LocalDateTime.of(2026, 7, 8,  20, 0),  cardNicolas),
-            tx(90,   TransactionType.EARN,   "seed-tx-c009", LocalDateTime.of(2026, 7, 10, 13, 0),  cardKevin),
-            tx(110,  TransactionType.EARN,   "seed-tx-c010", LocalDateTime.of(2026, 7, 11, 12, 45), cardLaura),
-            tx(-120, TransactionType.REDEEM, "seed-tx-c011", LocalDateTime.of(2026, 7, 9,  14, 20), cardLaura),
-            tx(35,   TransactionType.EARN,   "seed-tx-c012", LocalDateTime.of(2026, 7, 10, 19, 15), cardAlex)
+            tx(120,  TransactionType.EARN,   "seed-tx-c001", LocalDateTime.of(2026, 7,  5, 12, 15), cardMarie,    cMenuJour, cVin),
+            tx(120,  TransactionType.EARN,   "seed-tx-c002", LocalDateTime.of(2026, 7,  6, 13, 0),  cardJp,       cMenuJour, cVin),
+            tx(140,  TransactionType.EARN,   "seed-tx-c003", LocalDateTime.of(2026, 7,  7, 19, 20), cardJp,       cSteak, cVin),
+            tx(40,   TransactionType.EARN,   "seed-tx-c004", LocalDateTime.of(2026, 7,  8, 9,  0),  cardSophie,   cTarte),
+            tx(120,  TransactionType.EARN,   "seed-tx-c005", LocalDateTime.of(2026, 7,  9, 12, 30), cardAntoine,  cMenuJour),
+            tx(160,  TransactionType.EARN,   "seed-tx-c006", LocalDateTime.of(2026, 7,  9, 20, 0),  cardIsabelle, cDecouverte, cVin),
+            tx(140,  TransactionType.EARN,   "seed-tx-c007", LocalDateTime.of(2026, 7, 10, 13, 10), cardMarie,    cSteak, cTarte),
+            tx(25,   TransactionType.EARN,   "seed-tx-c008", LocalDateTime.of(2026, 7, 10, 19, 15), cardSophie,   cVin),
+            tx(140,  TransactionType.EARN,   "seed-tx-c009", LocalDateTime.of(2026, 7, 11, 12, 0),  cardIsabelle, cSteak),
+            tx(120,  TransactionType.EARN,   "seed-tx-c010", LocalDateTime.of(2026, 7, 11, 13, 45), cardJp,       cMenuJour),
+            tx(-200, TransactionType.REDEEM, "seed-tx-c011", LocalDateTime.of(2026, 7, 11, 14, 0),  cardMarie),
+            tx(120,  TransactionType.EARN,   "seed-tx-c012", LocalDateTime.of(2026, 7, 12, 12, 30), cardAntoine,  cMenuJour),
+            tx(-100, TransactionType.REDEEM, "seed-tx-c013", LocalDateTime.of(2026, 7, 12, 15, 0),  cardIsabelle),
+            // Sakura
+            tx(150,  TransactionType.EARN,   "seed-tx-s001", LocalDateTime.of(2026, 7,  8, 12, 30), cardYuki,    sSaumon, sTh),
+            tx(-80,  TransactionType.REDEEM, "seed-tx-s002", LocalDateTime.of(2026, 7,  9, 18, 45), cardYuki),
+            tx(90,   TransactionType.EARN,   "seed-tx-s003", LocalDateTime.of(2026, 7, 10, 13, 10), cardCeline,  sMaki, sTh),
+            tx(200,  TransactionType.EARN,   "seed-tx-s004", LocalDateTime.of(2026, 7, 11, 20, 0),  cardNicolas, sSaumon, sMochi),
+            tx(35,   TransactionType.EARN,   "seed-tx-s005", LocalDateTime.of(2026, 7, 12, 14, 0),  cardThomas,  sMochi),
+            // Burger House
+            tx(90,   TransactionType.EARN,   "seed-tx-b001", LocalDateTime.of(2026, 7,  9, 13, 0),  cardKevin,   bBurger, bFrites),
+            tx(110,  TransactionType.EARN,   "seed-tx-b002", LocalDateTime.of(2026, 7, 10, 12, 45), cardLaura,   bBacon, bMilk),
+            tx(-120, TransactionType.REDEEM, "seed-tx-b003", LocalDateTime.of(2026, 7, 10, 14, 20), cardLaura),
+            tx(35,   TransactionType.EARN,   "seed-tx-b004", LocalDateTime.of(2026, 7, 11, 19, 15), cardAlex,    bFrites),
+            tx(90,   TransactionType.EARN,   "seed-tx-b005", LocalDateTime.of(2026, 7, 12, 13, 0),  cardManon,   bBurger)
         ));
 
         // ── 10. Redemptions ──────────────────────────────────────────────────
@@ -236,7 +250,7 @@ public class DataSeeder implements ApplicationRunner {
             redemption(LocalDateTime.of(2026, 7, 9,  14, 20), rewardFrites,  cardLaura)
         ));
 
-        log.info("[DataSeeder] Done. 3 merchants, 6 users, 9 tiers, 15 products, 9 rewards, 15 customers, 15 cards, 12 transactions, 3 redemptions.");
+        log.info("[DataSeeder] Done. 3 merchants, 6 users, 9 tiers, 15 products, 9 rewards, 15 customers, 15 cards, 23 transactions, 3 redemptions.");
         log.info("[DataSeeder] Login: admin@comptoir.fr / Password123! (MERCHANT_ADMIN)");
     }
 
@@ -275,13 +289,14 @@ public class DataSeeder implements ApplicationRunner {
             .build();
     }
 
-    private Transaction tx(int points, TransactionType type, String key, LocalDateTime at, LoyaltyCard card) {
+    private Transaction tx(int points, TransactionType type, String key, LocalDateTime at, LoyaltyCard card, Product... products) {
         return Transaction.builder()
             .points(points)
             .type(type)
             .idempotencyKey(key)
             .createdAt(at)
             .card(card)
+            .products(java.util.Arrays.asList(products))
             .build();
     }
 

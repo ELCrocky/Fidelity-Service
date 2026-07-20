@@ -20,7 +20,8 @@ export class StaffShellComponent {
     { label: 'Clients', route: '/staff/customers', icon: 'users' },
     { label: 'Produits', route: '/staff/products', icon: 'box' },
     { label: 'Récompenses', route: '/staff/rewards', icon: 'gift' },
-    { label: 'Niveaux', route: '/staff/tiers', icon: 'layers' }
+    { label: 'Niveaux', route: '/staff/tiers', icon: 'layers' },
+    { label: 'Transactions', route: '/staff/transactions', icon: 'list' }
   ];
 
   protected readonly operator = {

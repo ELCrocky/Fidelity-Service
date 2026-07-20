@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-17T15:30:16+0300",
-    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
+    date = "2026-07-20T16:25:35+0300",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
 public class RewardMapperImpl implements RewardMapper {
@@ -23,8 +23,8 @@ public class RewardMapperImpl implements RewardMapper {
         RewardResponseDTO rewardResponseDTO = new RewardResponseDTO();
 
         rewardResponseDTO.setId( reward.getRewardID() );
-        rewardResponseDTO.setCostPoints( reward.getCostPoints() );
         rewardResponseDTO.setName( reward.getName() );
+        rewardResponseDTO.setCostPoints( reward.getCostPoints() );
 
         return rewardResponseDTO;
     }
@@ -37,8 +37,8 @@ public class RewardMapperImpl implements RewardMapper {
 
         Reward.RewardBuilder reward = Reward.builder();
 
-        reward.costPoints( dto.getCostPoints() );
         reward.name( dto.getName() );
+        reward.costPoints( dto.getCostPoints() );
 
         return reward.build();
     }

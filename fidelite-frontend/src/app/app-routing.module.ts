@@ -36,7 +36,8 @@ export const routes: Routes = [
       { path: 'customers',  loadComponent: () => import('./features/staff/customer-list/customer-list.component').then(m => m.CustomerListComponent) },
       { path: 'products',   loadComponent: () => import('./features/staff/product-list/product-list.component').then(m => m.ProductListComponent) },
       { path: 'rewards',    loadComponent: () => import('./features/staff/reward-list/reward-list.component').then(m => m.RewardListComponent) },
-      { path: 'tiers',      loadComponent: () => import('./features/staff/tier-list/tier-list.component').then(m => m.TierListComponent) },
+      { path: 'tiers',        loadComponent: () => import('./features/staff/tier-list/tier-list.component').then(m => m.TierListComponent) },
+      { path: 'transactions', loadComponent: () => import('./features/staff/transaction-list/transaction-list.component').then(m => m.TransactionListComponent) },
     ]
   },
 

@@ -1,10 +1,12 @@
 package com.fidelite.controller;
 
 import com.fidelite.dto.requests.TransactionRequestDTO;
+import com.fidelite.dto.responseDTO.ProductSalesDTO;
 import com.fidelite.dto.responseDTO.TransactionResponseDTO;
 import com.fidelite.endpoints.TransactionEndpoint;
 import com.fidelite.service.TransactionService;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 // REST controller for point transactions (earn/redeem/adjust/expire).
@@ -35,5 +38,19 @@ public class TransactionController implements TransactionEndpoint {
     @GetMapping("/card/{cardId}")
     public Page<TransactionResponseDTO> byCard(@PathVariable UUID cardId, Pageable pageable) {
         return transactionService.getByCard(cardId, pageable);
+    }
+
+    // Returns paginated transactions for all cards of a merchant.
+    @Override
+    @GetMapping
+    public Page<TransactionResponseDTO> byMerchant(@RequestParam UUID merchantId, Pageable pageable) {
+        return transactionService.getByMerchant(merchantId, pageable);
+    }
+
+    // Returns product sales counts for a merchant, sorted by most sold.
+    @Override
+    @GetMapping("/product-sales")
+    public List<ProductSalesDTO> productSalesByMerchant(@RequestParam UUID merchantId) {
+        return transactionService.getProductSalesByMerchant(merchantId);
     }
 }

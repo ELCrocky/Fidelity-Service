@@ -5,6 +5,7 @@ import com.fidelite.component.ProductComponent;
 import com.fidelite.component.TierComponent;
 import com.fidelite.component.TransactionComponent;
 import com.fidelite.dto.requests.TransactionRequestDTO;
+import com.fidelite.dto.responseDTO.ProductSalesDTO;
 import com.fidelite.dto.responseDTO.TransactionResponseDTO;
 import com.fidelite.enums.TransactionType;
 import com.fidelite.exceptions.rest.BadRequestRestException;
@@ -96,6 +97,17 @@ public class TransactionService {
     public Page<TransactionResponseDTO> getByCard(UUID cardId, Pageable pageable) {
         return transactionComponent.findByCardId(cardId, pageable)
                 .map(transactionMapper::toResponse);
+    }
+
+    // Returns paginated transactions across all cards for a merchant.
+    public Page<TransactionResponseDTO> getByMerchant(UUID merchantId, Pageable pageable) {
+        return transactionComponent.findByMerchantId(merchantId, pageable)
+                .map(transactionMapper::toResponse);
+    }
+
+    // Returns product sales counts for a merchant, sorted by most sold.
+    public List<ProductSalesDTO> getProductSalesByMerchant(UUID merchantId) {
+        return transactionComponent.countProductSalesByMerchant(merchantId);
     }
 
     // --- helper methods ---

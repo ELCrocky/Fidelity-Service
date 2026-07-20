@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Reward } from '../../../core/models/reward.model';
 import { RewardService } from '../../../services/reward.service';
+import { TokenStorageService } from '../../../services/token-storage.service';
 
 // Reward card grid with create/edit/delete backed by RewardService.
 @Component({
@@ -14,19 +15,12 @@ import { RewardService } from '../../../services/reward.service';
 export class RewardListComponent implements OnInit {
   private readonly _fb = inject(NonNullableFormBuilder);
   private readonly _rewardService = inject(RewardService);
+  private readonly _tokenStorage = inject(TokenStorageService);
+  private readonly _cdr = inject(ChangeDetectorRef);
 
-  // TODO: replace mock data with load() once backend is wired
-  protected rewards: Reward[] = [
-    { id: 1, name: 'Café Offert', description: 'Un café expresso ou allongé offert', costPoints: 200 },
-    { id: 2, name: 'Dessert Gratuit', description: 'Dessert du menu au choix', costPoints: 350 },
-    { id: 3, name: 'Repas Offert', description: 'Repas complet pour une personne', costPoints: 800 },
-    { id: 4, name: 'Réduction 10%', description: '10% de réduction sur votre prochaine commande', costPoints: 150 },
-    { id: 5, name: 'Menu Premium', description: 'Menu 3 plats avec boisson incluse', costPoints: 600 },
-    { id: 6, name: 'Livraison Gratuite', description: 'Frais de livraison offerts', costPoints: 100 }
-  ];
-
+  protected rewards: Reward[] = [];
   protected showForm = false;
-  protected editingId: number | null = null;
+  protected editingId: string | null = null;
   protected errorMessage: string | null = null;
 
   protected readonly rewardForm = this._fb.group({
@@ -36,7 +30,12 @@ export class RewardListComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    // TODO: call this._rewardService.getByMerchant(merchantId) here once backend is wired
+    const merchantId = this._tokenStorage.getMerchantId();
+    if (!merchantId) return;
+    this._rewardService.getByMerchant(merchantId).subscribe({
+      next: (rewards) => { this.rewards = rewards; this._cdr.detectChanges(); },
+      error: () => this.errorMessage = 'Impossible de charger les récompenses.'
+    });
   }
 
   protected openForm(reward?: Reward): void {
@@ -46,7 +45,7 @@ export class RewardListComponent implements OnInit {
       this.editingId = reward.id;
       this.rewardForm.setValue({
         name: reward.name,
-        description: reward.description,
+        description: reward.description ?? '',
         costPoints: reward.costPoints
       });
     } else {
@@ -62,7 +61,7 @@ export class RewardListComponent implements OnInit {
     this.rewardForm.reset();
   }
 
-  protected deleteReward(id: number): void {
+  protected deleteReward(id: string): void {
     if (!confirm('Supprimer cette récompense ?')) return;
     this._rewardService.delete(id).subscribe({
       next: () => this.rewards = this.rewards.filter(r => r.id !== id),
@@ -73,26 +72,14 @@ export class RewardListComponent implements OnInit {
   protected onSubmit(): void {
     if (this.rewardForm.invalid) return;
     const value = this.rewardForm.getRawValue();
-    // TODO: replace '' with TokenStorageService.getMerchantId() once available
-    const request = { ...value, merchantId: '' };
+    const request = { ...value, merchantId: this._tokenStorage.getMerchantId() ?? '' };
 
-    if (this.editingId !== null) {
-      this._rewardService.update(this.editingId, request).subscribe({
-        next: (updated) => {
-          const idx = this.rewards.findIndex(r => r.id === this.editingId);
-          if (idx !== -1) this.rewards[idx] = updated;
-          this.closeForm();
-        },
-        error: () => this.errorMessage = 'Une erreur est survenue lors de la modification.'
-      });
-    } else {
-      this._rewardService.create(request).subscribe({
+    this._rewardService.create(request).subscribe({
         next: (created) => {
           this.rewards = [...this.rewards, created];
           this.closeForm();
         },
         error: () => this.errorMessage = 'Une erreur est survenue lors de la création.'
       });
-    }
   }
 }

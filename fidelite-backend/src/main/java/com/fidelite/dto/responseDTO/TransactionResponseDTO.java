@@ -15,5 +15,7 @@ public class TransactionResponseDTO {
     private TransactionType type;
     private LocalDateTime createdAt;
     private List<String> productNames;
+    private String customerName;
+    private String cardBarcode;
 
 }

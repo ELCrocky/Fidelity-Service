@@ -1,6 +1,7 @@
 package com.fidelite.component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import com.fidelite.dto.responseDTO.ProductSalesDTO;
 import com.fidelite.enums.TransactionType;
 import com.fidelite.exceptions.NotFoundElementException;
 import com.fidelite.models.Transaction;
@@ -45,5 +47,15 @@ public class TransactionComponent {
     public long sumPointsByMerchantAndTypeAndPeriod(UUID merchantId, TransactionType type,
                                                      LocalDateTime start, LocalDateTime end) {
         return transactionRepository.sumPointsByMerchantAndTypeAndPeriod(merchantId, type, start, end);
+    }
+
+    // Returns paginated transactions for all cards belonging to a merchant, newest first.
+    public Page<Transaction> findByMerchantId(UUID merchantId, Pageable pageable) {
+        return transactionRepository.findByCardCustomerMerchantIdMerchantOrderByCreatedAtDesc(merchantId, pageable);
+    }
+
+    // Returns product sales counts for a merchant, sorted by most sold first.
+    public List<ProductSalesDTO> countProductSalesByMerchant(UUID merchantId) {
+        return transactionRepository.countProductSalesByMerchant(merchantId);
     }
 }

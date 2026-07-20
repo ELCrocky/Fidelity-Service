@@ -1,0 +1,63 @@
+<section class="page-head">
+	<div>
+		<h1>Transactions</h1>
+		<p>{{ totalElements }} transaction{{ totalElements !== 1 ? 's' : '' }} au total</p>
+	</div>
+	<div class="head-controls">
+		<select class="filter-select" [(ngModel)]="typeFilter">
+			<option value="">Tous les types</option>
+			<option value="EARN">EARN</option>
+			<option value="REDEEM">REDEEM</option>
+			<option value="ADJUST">ADJUST</option>
+			<option value="EXPIRE">EXPIRE</option>
+		</select>
+		<input class="search-input" type="text" placeholder="Chercher client, carte, produit…"
+			[(ngModel)]="searchTerm"/>
+	</div>
+</section>
+
+<section class="panel">
+	<div class="table-wrap">
+		<table>
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Client</th>
+					<th>Carte</th>
+					<th>Produits</th>
+					<th>Type</th>
+					<th>Points</th>
+				</tr>
+			</thead>
+			<tbody>
+				@for (tx of filtered; track tx.id) {
+					<tr>
+						<td class="date-cell">{{ formatDate(tx.createdAt) }}</td>
+						<td class="strong">{{ tx.customerName || '—' }}</td>
+						<td class="mono">{{ tx.cardBarcode || '—' }}</td>
+						<td class="products-cell">
+							@if (tx.productNames && tx.productNames.length > 0) {
+								@for (name of tx.productNames; track name) {
+									<span class="product-tag">{{ name }}</span>
+								}
+							} @else {
+								<span class="muted">—</span>
+							}
+						</td>
+						<td>
+							<span class="badge" [attr.data-type]="tx.type">{{ tx.type }}</span>
+						</td>
+						<td class="points" [class.is-negative]="tx.points < 0">
+							{{ pointsLabel(tx) }}
+						</td>
+					</tr>
+				}
+				@empty {
+					<tr>
+						<td colspan="6" class="empty-row">Aucune transaction trouvée</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</section>

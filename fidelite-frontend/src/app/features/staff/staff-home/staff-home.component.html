@@ -1,26 +1,114 @@
-<!-- Dashboard overview: summary cards and a recent transactions table. -->
 <section class="page-head">
 	<div>
 		<h1>Aperçu du programme de fidélité</h1>
-		<p>Juillet 2024</p>
+		<p>Tableau de bord</p>
 	</div>
 </section>
 
 <section class="stats-grid">
-	@for (stat of stats; track stat.icon) {
-		<article class="stat-card" [attr.data-tone]="stat.tone">
-			<div class="stat-card__icon" [attr.data-icon]="stat.icon"></div>
-			<div class="stat-card__value">{{ stat.value }}</div>
-			<div class="stat-card__label">{{ stat.label }}</div>
-			<div class="stat-card__delta">{{ stat.delta }}</div>
-		</article>
-	}
+	<article class="stat-card" data-tone="blue" routerLink="/staff/customers">
+		<div class="stat-card__icon">👤</div>
+		<div class="stat-card__value">{{ totalCustomers }}</div>
+		<div class="stat-card__label">Clients</div>
+	</article>
+	<article class="stat-card" data-tone="orange" routerLink="/staff/products">
+		<div class="stat-card__icon">🛍️</div>
+		<div class="stat-card__value">{{ totalProducts }}</div>
+		<div class="stat-card__label">Produits</div>
+	</article>
+	<article class="stat-card" data-tone="purple" routerLink="/staff/tiers">
+		<div class="stat-card__icon">🏅</div>
+		<div class="stat-card__value">{{ totalTiers }}</div>
+		<div class="stat-card__label">Paliers</div>
+	</article>
+	<article class="stat-card" data-tone="green" routerLink="/staff/rewards">
+		<div class="stat-card__icon">🎁</div>
+		<div class="stat-card__value">{{ totalRewards }}</div>
+		<div class="stat-card__label">Récompenses</div>
+	</article>
+</section>
+
+<section class="charts-row">
+	<!-- Produits les plus vendus -->
+	<div class="chart-card" routerLink="/staff/products">
+		<h3 class="chart-title">Produits les plus vendus</h3>
+		@if (salesBars.length > 0) {
+			<div class="bar-chart">
+				@for (bar of salesBars; track bar.name) {
+					<div class="bar-row">
+						<span class="bar-label">{{ bar.name }}</span>
+						<div class="bar-track">
+							<div class="bar-fill" [style.width.%]="bar.pct" [style.background]="bar.color"></div>
+						</div>
+						<span class="bar-count">{{ bar.count }}</span>
+					</div>
+				}
+			</div>
+		} @else {
+			<p class="chart-empty">Aucune vente enregistrée</p>
+		}
+	</div>
+
+	<!-- Paliers de fidélité -->
+	<div class="chart-card" routerLink="/staff/tiers">
+		<h3 class="chart-title">Clients par palier</h3>
+		@if (tierSlices.length > 0) {
+			<div class="donut-layout">
+				<div class="donut-svg-wrap">
+					<svg viewBox="0 0 140 140" class="donut-svg">
+						<circle cx="70" cy="70" r="54" fill="none"
+							stroke="var(--border-soft)" stroke-width="20"/>
+						@for (slice of tierSlices; track slice.label) {
+							<circle cx="70" cy="70" r="54" fill="none"
+								[attr.stroke]="slice.color"
+								stroke-width="20"
+								[attr.stroke-dasharray]="slice.dasharray"
+								[attr.stroke-dashoffset]="slice.dashoffset"
+								transform="rotate(-90 70 70)"
+								stroke-linecap="butt"/>
+						}
+						<text x="70" y="62" text-anchor="middle" class="donut-num">{{ totalCustomers }}</text>
+						<text x="70" y="80" text-anchor="middle" class="donut-lbl">clients</text>
+					</svg>
+				</div>
+				<div class="donut-legend">
+					@for (t of tierLegend; track t.name) {
+						<div class="legend-row">
+							<span class="legend-dot" [style.background]="t.color"></span>
+							<span class="legend-name">{{ t.name }}</span>
+							<span class="legend-pct">{{ t.count }} ({{ t.pct }}%)</span>
+						</div>
+					}
+				</div>
+			</div>
+		} @else {
+			<p class="chart-empty">Aucun client avec palier</p>
+		}
+	</div>
+
+	<!-- Récompenses -->
+	<div class="chart-card chart-card--rewards" routerLink="/staff/rewards">
+		<h3 class="chart-title">Récompenses disponibles</h3>
+		@if (rewards.length > 0) {
+			<div class="reward-list">
+				@for (r of rewards; track r.id) {
+					<div class="reward-item">
+						<span class="reward-icon">🎁</span>
+						<span class="reward-name">{{ r.name }}</span>
+						<span class="reward-cost">{{ r.costPoints }} pts</span>
+					</div>
+				}
+			</div>
+		} @else {
+			<p class="chart-empty">Aucune récompense</p>
+		}
+	</div>
 </section>
 
 <section class="panel">
 	<div class="panel__head">
 		<h2>Transactions récentes</h2>
-		<span>{{ transactions.length }} entrées</span>
+		<a class="panel__link" routerLink="/staff/transactions">Voir tout →</a>
 	</div>
 
 	<div class="table-wrap">
@@ -29,25 +117,34 @@
 				<tr>
 					<th>Date</th>
 					<th>Client</th>
-					<th>Produit</th>
+					<th>Produits</th>
 					<th>Type</th>
 					<th>Points</th>
 				</tr>
 			</thead>
 			<tbody>
-				@for (transaction of transactions; track transaction.date + transaction.client) {
+				@for (tx of recentTransactions; track tx.id) {
 					<tr>
-						<td>{{ transaction.date }}</td>
-						<td class="strong">{{ transaction.client }}</td>
-						<td>{{ transaction.product }}</td>
+						<td class="muted-cell">{{ formatDate(tx.createdAt) }}</td>
+						<td class="strong">{{ tx.customerName || '—' }}</td>
 						<td>
-							<span class="badge" [class.is-redeem]="transaction.type === 'REDEEM'">
-								{{ transaction.type }}
-							</span>
+							@if (tx.productNames && tx.productNames.length > 0) {
+								{{ tx.productNames.join(', ') }}
+							} @else {
+								<span class="muted">—</span>
+							}
 						</td>
-						<td class="points" [class.is-negative]="transaction.points.startsWith('-')">
-							{{ transaction.points }}
+						<td>
+							<span class="badge" [class.is-redeem]="tx.type === 'REDEEM'">{{ tx.type }}</span>
 						</td>
+						<td class="points" [class.is-negative]="tx.points < 0">
+							{{ tx.points > 0 ? '+' + tx.points : tx.points }}
+						</td>
+					</tr>
+				}
+				@empty {
+					<tr>
+						<td colspan="5" class="empty-row">Aucune transaction récente</td>
 					</tr>
 				}
 			</tbody>

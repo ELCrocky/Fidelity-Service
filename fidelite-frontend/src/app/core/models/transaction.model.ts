@@ -5,7 +5,9 @@ export interface Transaction {
     points: number;
     type: TransactionType;
     createdAt: string;
-    cardId: string;
+    productNames: string[];
+    customerName: string;
+    cardBarcode: string;
 }
 
 export interface TransactionRequest {

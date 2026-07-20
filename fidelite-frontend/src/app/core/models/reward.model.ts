@@ -1,7 +1,7 @@
 export interface Reward {
-  id: number;
+  id: string; // UUID
   name: string;
-  description: string;
+  description?: string;
   costPoints: number;
 }
 

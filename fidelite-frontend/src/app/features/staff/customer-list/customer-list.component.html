@@ -24,7 +24,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (customer of filteredCustomers; track customer.barcode) {
+        @for (customer of filteredCustomers; track customer.id) {
           <tr [class.is-selected]="customer === selectedCustomer" (click)="selectCustomer(customer)">
             <td>
               <div class="customer-cell">
@@ -38,7 +38,7 @@
             <td>{{ customer.barcode }}</td>
             <td class="points">{{ customer.points | number:'1.0-0' }}</td>
             <td><span class="tier tier--{{ customer.tier.toLowerCase() }}">{{ customer.tier }}</span></td>
-            <td><span class="status" [class.is-muted]="customer.status === 'Inactif'">{{ customer.status }}</span></td>
+            <td><span class="status" [class.is-muted]="customer.status !== 'Actif'">{{ customer.status }}</span></td>
           </tr>
         }
       </tbody>
@@ -76,18 +76,18 @@
           <dd>{{ selectedCustomer.barcode }}</dd>
         </div>
         <div>
-          <dt>Membre depuis</dt>
-          <dd>{{ selectedCustomer.memberSince }}</dd>
+          <dt>Date de naissance</dt>
+          <dd>{{ selectedCustomer.dateNaissance }}</dd>
         </div>
         <div>
           <dt>Statut</dt>
-          <dd><span class="status" [class.is-muted]="selectedCustomer.status === 'Inactif'">{{ selectedCustomer.status }}</span></dd>
+          <dd><span class="status" [class.is-muted]="selectedCustomer.status !== 'Actif'">{{ selectedCustomer.status }}</span></dd>
         </div>
       </dl>
 
       <h3>Historique</h3>
       <div class="history-list">
-        @for (item of selectedCustomer.history; track item.date) {
+        @for (item of selectedHistory; track item.date) {
           <article class="history-item">
             <div>
               <div class="history-item__title">{{ item.label }}</div>

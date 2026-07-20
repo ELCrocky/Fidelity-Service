@@ -32,6 +32,17 @@ export class TokenStorageService {
         return sessionStorage.getItem(USER_TYPE_KEY);
     }
 
+    getMerchantId(): string | null {
+        const token = this.getToken();
+        if (!token) return null;
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+            return payload['merchantId'] ?? null;
+        } catch {
+            return null;
+        }
+    }
+
     clear(): void{
         sessionStorage.clear();
     }

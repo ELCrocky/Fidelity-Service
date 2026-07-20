@@ -17,6 +17,10 @@ public interface ProductEndpoint {
     @Operation
     ProductResponseDTO create(ProductRequestDTO request);
 
+    // Updates an existing product.
+    @Operation
+    ProductResponseDTO update(Long id, ProductRequestDTO request);
+
     // Deletes the product with the given ID.
     @Operation
     void delete(Long id);

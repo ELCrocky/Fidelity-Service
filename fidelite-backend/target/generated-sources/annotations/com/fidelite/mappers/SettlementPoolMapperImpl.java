@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-17T15:30:16+0300",
-    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
+    date = "2026-07-20T16:25:35+0300",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
 public class SettlementPoolMapperImpl implements SettlementPoolMapper {
@@ -23,10 +23,10 @@ public class SettlementPoolMapperImpl implements SettlementPoolMapper {
         SettlementPoolResponseDTO settlementPoolResponseDTO = new SettlementPoolResponseDTO();
 
         settlementPoolResponseDTO.setId( settlementPool.getSpId() );
-        settlementPoolResponseDTO.setBalance( settlementPool.getBalance() );
-        settlementPoolResponseDTO.setCommissionPerInvoice( settlementPool.getCommissionPerInvoice() );
         settlementPoolResponseDTO.setName( settlementPool.getName() );
         settlementPoolResponseDTO.setPointValue( settlementPool.getPointValue() );
+        settlementPoolResponseDTO.setBalance( settlementPool.getBalance() );
+        settlementPoolResponseDTO.setCommissionPerInvoice( settlementPool.getCommissionPerInvoice() );
 
         return settlementPoolResponseDTO;
     }
@@ -39,9 +39,9 @@ public class SettlementPoolMapperImpl implements SettlementPoolMapper {
 
         SettlementPool.SettlementPoolBuilder settlementPool = SettlementPool.builder();
 
-        settlementPool.commissionPerInvoice( dto.getCommissionPerInvoice() );
         settlementPool.name( dto.getName() );
         settlementPool.pointValue( dto.getPointValue() );
+        settlementPool.commissionPerInvoice( dto.getCommissionPerInvoice() );
 
         return settlementPool.build();
     }

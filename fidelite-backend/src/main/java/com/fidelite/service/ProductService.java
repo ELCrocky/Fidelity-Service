@@ -41,6 +41,19 @@ public class ProductService {
         }
     }
 
+    public ProductResponseDTO updateProduct(Long id, ProductRequestDTO request) {
+        try {
+            Product product = productComponent.findById(id);
+            product.setName(request.getName());
+            product.setProductType(request.getProductType());
+            product.setProductPoint(request.getProductPoint());
+            product.setPromotion(request.isPromotion());
+            return productMapper.toResponse(productComponent.save(product));
+        } catch (NotFoundElementException e) {
+            throw new BadRequestRestException(e.getMessage());
+        }
+    }
+
     public void deleteProduct(Long id) {
         productComponent.deleteById(id);
     }

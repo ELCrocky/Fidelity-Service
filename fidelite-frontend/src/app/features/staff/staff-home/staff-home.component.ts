@@ -1,31 +1,140 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
+import { CustomerService } from '../../../services/customer.service';
+import { ProductService } from '../../../services/product.service';
+import { TierService } from '../../../services/tier.service';
+import { RewardService } from '../../../services/reward.service';
+import { TransactionService } from '../../../services/transaction.service';
+import { Transaction } from '../../../core/models/transaction.model';
+import { Reward } from '../../../core/models/reward.model';
+import { TokenStorageService } from '../../../services/token-storage.service';
 
-// Staff dashboard overview with KPI cards and recent transactions.
+interface DonutSlice {
+  label: string;
+  color: string;
+  pct: number;
+  dasharray: string;
+  dashoffset: string;
+}
+
+interface SalesBar {
+  name: string;
+  count: number;
+  pct: number;
+  color: string;
+}
+
 @Component({
   selector: 'app-staff-home',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, RouterLink],
   templateUrl: './staff-home.component.html',
   styleUrl: './staff-home.component.scss'
 })
-export class StaffHomeComponent {
-  // TODO: replace with real API calls via CustomerService + TransactionService (forkJoin)
-  protected readonly stats = [
-    { label: 'Clients total', value: '1 284', delta: '+42 ce mois', tone: 'blue', icon: 'users' },
-    { label: 'Cartes actives', value: '1 047', delta: '81% du total', tone: 'green', icon: 'card' },
-    { label: 'Points émis', value: '48 320', delta: 'Ce mois-ci', tone: 'orange', icon: 'trend' },
-    { label: 'Points échangés', value: '12 740', delta: 'Ce mois-ci', tone: 'purple', icon: 'refresh' }
-  ];
+export class StaffHomeComponent implements OnInit {
+  private readonly _customerService = inject(CustomerService);
+  private readonly _productService = inject(ProductService);
+  private readonly _tierService = inject(TierService);
+  private readonly _rewardService = inject(RewardService);
+  private readonly _transactionService = inject(TransactionService);
+  private readonly _tokenStorage = inject(TokenStorageService);
+  private readonly _cdr = inject(ChangeDetectorRef);
 
-  // TODO: replace with TransactionService.getRecent(merchantId, {page:0, size:10})
-  protected readonly transactions = [
-    { date: '2024-07-11', client: 'Sophie Leclerc', product: 'Dessert du Jour', type: 'EARN', points: '+45' },
-    { date: '2024-07-10', client: 'Marie Dupont', product: 'Menu Déjeuner', type: 'EARN', points: '+120' },
-    { date: '2024-07-10', client: 'Céline Moreau', product: 'Plateau Fromages', type: 'EARN', points: '+80' },
-    { date: '2024-07-09', client: 'Jean-Pierre Martin', product: 'Burger Classic', type: 'EARN', points: '+60' },
-    { date: '2024-07-08', client: 'Marie Dupont', product: 'Café Offert', type: 'REDEEM', points: '-200' },
-    { date: '2024-07-07', client: 'Isabelle Bernard', product: 'Repas Gratuit', type: 'REDEEM', points: '-500' },
-    { date: '2024-07-06', client: 'Isabelle Bernard', product: 'Salade César', type: 'EARN', points: '+150' },
-    { date: '2024-07-03', client: 'Jean-Pierre Martin', product: 'Menu Famille', type: 'EARN', points: '+90' }
-  ];
+  protected totalCustomers = 0;
+  protected totalProducts = 0;
+  protected totalTiers = 0;
+  protected totalRewards = 0;
+
+  protected salesBars: SalesBar[] = [];
+  protected tierSlices: DonutSlice[] = [];
+  protected tierLegend: { name: string; color: string; count: number; pct: number }[] = [];
+  protected rewards: Reward[] = [];
+  protected recentTransactions: Transaction[] = [];
+
+  private readonly C = 2 * Math.PI * 54;
+
+  ngOnInit(): void {
+    const merchantId = this._tokenStorage.getMerchantId();
+    if (!merchantId) return;
+
+    forkJoin({
+      customers: this._customerService.getByMerchant(merchantId),
+      products: this._productService.getByMerchant(merchantId),
+      tiers: this._tierService.getByMerchant(merchantId),
+      rewards: this._rewardService.getByMerchant(merchantId),
+      sales: this._transactionService.getProductSales(merchantId),
+      recent: this._transactionService.getByMerchant(merchantId, 0, 10),
+    }).subscribe({
+      next: ({ customers, products, tiers, rewards, sales, recent }) => {
+        this.totalCustomers = customers.totalElements;
+        this.totalProducts = products.length;
+        this.totalTiers = tiers.length;
+        this.totalRewards = rewards.length;
+
+        const barColors = ['#f97316', '#8b5cf6', '#3b82f6', '#22c55e', '#ec4899', '#f59e0b', '#14b8a6', '#ef4444'];
+        const top = sales.slice(0, 8);
+        const max = top[0]?.salesCount ?? 1;
+        this.salesBars = top.map((s, i) => ({
+          name: s.productName,
+          count: s.salesCount,
+          pct: Math.round((s.salesCount / max) * 100),
+          color: barColors[i % barColors.length]
+        }));
+
+        const tierPalette = ['#f59e0b', '#94a3b8', '#cd853f', '#22c55e', '#ec4899'];
+        const sorted = [...tiers].sort((a, b) => a.minPoints - b.minPoints);
+
+        // Group customers by tierName
+        const tierCount: Record<string, number> = {};
+        for (const c of customers.content) {
+          const name = c.tierName ?? 'Sans palier';
+          tierCount[name] = (tierCount[name] ?? 0) + 1;
+        }
+        const total = customers.totalElements || 1;
+        const donutItems = sorted.map((t, i) => ({
+          label: t.name,
+          count: tierCount[t.name] ?? 0,
+          color: tierPalette[i % tierPalette.length]
+        })).filter(x => x.count > 0);
+
+        this.tierSlices = this.buildDonut(donutItems);
+        this.tierLegend = donutItems.map(x => ({
+          name: x.label,
+          color: x.color,
+          count: x.count,
+          pct: Math.round((x.count / total) * 100)
+        }));
+
+        this.rewards = rewards;
+        this.recentTransactions = recent.content;
+        this._cdr.detectChanges();
+      }
+    });
+  }
+
+  protected formatDate(dt: string): string {
+    if (!dt) return '—';
+    return new Date(dt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  private buildDonut(items: { label: string; count: number; color: string }[]): DonutSlice[] {
+    const total = items.reduce((s, i) => s + i.count, 0);
+    if (total === 0) return [];
+    let cumulative = 0;
+    return items.map(item => {
+      const pct = item.count / total;
+      const arc = pct * this.C;
+      const offset = -(cumulative / total) * this.C;
+      cumulative += item.count;
+      return {
+        label: item.label,
+        color: item.color,
+        pct: Math.round(pct * 100),
+        dasharray: `${arc.toFixed(2)} ${(this.C - arc).toFixed(2)}`,
+        dashoffset: `${offset.toFixed(2)}`
+      };
+    });
+  }
 }

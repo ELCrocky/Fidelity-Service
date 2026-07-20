@@ -1,6 +1,7 @@
 package com.fidelite.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.fidelite.dto.responseDTO.ProductSalesDTO;
 import com.fidelite.enums.TransactionType;
 import com.fidelite.models.Transaction;
 
@@ -25,6 +27,20 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     // Fetch a transaction by its idempotency key (used to return the original response on retry)
     Optional<Transaction> findByIdempotencyKey(String idempotencyKey);
+
+    // Returns paginated transactions for all cards belonging to a merchant, newest first
+    Page<Transaction> findByCardCustomerMerchantIdMerchantOrderByCreatedAtDesc(UUID merchantId, Pageable pageable);
+
+    // Returns each product's EARN transaction count for a merchant, sorted descending
+    @Query("""
+        SELECT new com.fidelite.dto.responseDTO.ProductSalesDTO(p.name, COUNT(t))
+        FROM Transaction t JOIN t.products p
+        WHERE t.card.customer.merchant.idMerchant = :merchantId
+          AND t.type = com.fidelite.enums.TransactionType.EARN
+        GROUP BY p.idProduct, p.name
+        ORDER BY COUNT(t) DESC
+        """)
+    List<ProductSalesDTO> countProductSalesByMerchant(@Param("merchantId") UUID merchantId);
 
     // Sum all points of a given type issued by a merchant within a date range (used for settlement)
     @Query("""
