@@ -8,7 +8,7 @@
 
 <section class="search-bar">
   <span class="search-bar__icon">⌕</span>
-  <input [(ngModel)]="searchTerm" type="text" placeholder="Rechercher par nom, email ou code-barres..." />
+  <input [ngModel]="searchTerm" (ngModelChange)="onSearch($event)" type="text" placeholder="Rechercher par nom, email ou code-barres..." />
 </section>
 
 <section class="customers-layout">
@@ -24,7 +24,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (customer of filteredCustomers; track customer.id) {
+        @for (customer of pagedCustomers; track customer.id) {
           <tr [class.is-selected]="customer === selectedCustomer" (click)="selectCustomer(customer)">
             <td>
               <div class="customer-cell">
@@ -43,6 +43,15 @@
         }
       </tbody>
     </table>
+    @if (totalPages > 1) {
+      <div class="pagination-bar">
+        <button class="pag-btn" [disabled]="currentPage === 0" (click)="prevPage()">‹</button>
+        @for (p of pageNumbers; track p) {
+          <button class="pag-btn pag-btn--num" [class.is-active]="p === currentPage" (click)="goToPage(p)">{{ p + 1 }}</button>
+        }
+        <button class="pag-btn" [disabled]="currentPage >= totalPages - 1" (click)="nextPage()">›</button>
+      </div>
+    }
   </div>
 
   @if (selectedCustomer) {
@@ -100,3 +109,47 @@
     </aside>
   }
 </section>
+
+@if (customers.length > 0) {
+  <div class="stats-section">
+    <div class="stats-col">
+      <div class="stats-head"><h2>Classement par points</h2></div>
+      <table class="stats-table">
+        <thead>
+          <tr><th>#</th><th>Client</th><th>Points</th><th>Statut</th></tr>
+        </thead>
+        <tbody>
+          @for (c of topByPoints; track c.id; let i = $index) {
+            <tr>
+              <td class="rank-cell">#{{ i + 1 }}</td>
+              <td class="rank-name">{{ c.name }}</td>
+              <td class="pts-cell">{{ c.points | number:'1.0-0' }}</td>
+              <td><span class="status" [class.is-muted]="c.status !== 'Actif'">{{ c.status }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="stats-col stats-col--narrow">
+      <div class="stats-head"><h2>Statistiques</h2></div>
+      <div class="group-list">
+        <div class="group-row">
+          <span class="group-name">Total clients</span>
+          <span class="group-count">{{ customers.length }}</span>
+        </div>
+        <div class="group-row">
+          <span class="group-name">Clients actifs</span>
+          <span class="group-count">{{ activeCount }}</span>
+        </div>
+        <div class="group-row">
+          <span class="group-name">Points totaux</span>
+          <span class="group-count">{{ totalPoints | number:'1.0-0' }}</span>
+        </div>
+        <div class="group-row">
+          <span class="group-name">Moyenne / client</span>
+          <span class="group-count">{{ avgPoints | number:'1.0-0' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+}

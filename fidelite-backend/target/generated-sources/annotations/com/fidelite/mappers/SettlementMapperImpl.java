@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-20T16:25:35+0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
+    date = "2026-07-22T11:53:39+0300",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
 )
 @Component
 public class SettlementMapperImpl implements SettlementMapper {
@@ -33,12 +33,12 @@ public class SettlementMapperImpl implements SettlementMapper {
         settlementResponseDTO.setId( settlement.getSettlementId() );
         settlementResponseDTO.setComission( settlement.getCommision() );
         settlementResponseDTO.setLines( settlementLineListToSettlementLineResponseDTOList( settlement.getLines() ) );
-        settlementResponseDTO.setPeriodStart( settlement.getPeriodStart() );
+        settlementResponseDTO.setCreatedAt( settlement.getCreatedAt() );
+        settlementResponseDTO.setNetAmount( settlement.getNetAmount() );
         settlementResponseDTO.setPeriodEnd( settlement.getPeriodEnd() );
+        settlementResponseDTO.setPeriodStart( settlement.getPeriodStart() );
         settlementResponseDTO.setPointsIssued( settlement.getPointsIssued() );
         settlementResponseDTO.setPointsRedeemed( settlement.getPointsRedeemed() );
-        settlementResponseDTO.setNetAmount( settlement.getNetAmount() );
-        settlementResponseDTO.setCreatedAt( settlement.getCreatedAt() );
 
         return settlementResponseDTO;
     }
@@ -51,8 +51,8 @@ public class SettlementMapperImpl implements SettlementMapper {
 
         Settlement.SettlementBuilder settlement = Settlement.builder();
 
-        settlement.periodStart( dto.getPeriodStart() );
         settlement.periodEnd( dto.getPeriodEnd() );
+        settlement.periodStart( dto.getPeriodStart() );
 
         return settlement.build();
     }

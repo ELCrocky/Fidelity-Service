@@ -22,6 +22,41 @@ export class TransactionListComponent implements OnInit {
   protected searchTerm = '';
   protected typeFilter: string = '';
 
+  protected currentPage = 0;
+  protected readonly pageSize = 15;
+
+  protected get totalPages(): number { return Math.max(1, Math.ceil(this.filtered.length / this.pageSize)); }
+  protected get pageStart(): number { return this.currentPage * this.pageSize + 1; }
+  protected get pageEnd(): number { return Math.min(this.filtered.length, (this.currentPage + 1) * this.pageSize); }
+  protected get paged(): Transaction[] {
+    const s = this.currentPage * this.pageSize;
+    return this.filtered.slice(s, s + this.pageSize);
+  }
+  protected get productGroups(): { name: string; count: number }[] {
+    const counts: Record<string, number> = {};
+    for (const tx of this.transactions) {
+      if (tx.type !== 'EARN' || !tx.productNames?.length) continue;
+      for (const name of tx.productNames) counts[name] = (counts[name] ?? 0) + 1;
+    }
+    return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
+  }
+
+  protected get clientGroups(): { name: string; count: number }[] {
+    const counts: Record<string, number> = {};
+    for (const tx of this.transactions) {
+      const name = tx.customerName || '—';
+      counts[name] = (counts[name] ?? 0) + 1;
+    }
+    return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
+  }
+
+  protected get pageNumbers(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i); }
+  protected prevPage(): void { if (this.currentPage > 0) this.currentPage--; }
+  protected nextPage(): void { if (this.currentPage < this.totalPages - 1) this.currentPage++; }
+  protected goToPage(p: number): void { this.currentPage = p; }
+  protected onSearch(term: string): void { this.searchTerm = term; this.currentPage = 0; }
+  protected onTypeFilter(val: string): void { this.typeFilter = val; this.currentPage = 0; }
+
   ngOnInit(): void {
     const merchantId = this._tokenStorage.getMerchantId();
     if (!merchantId) return;

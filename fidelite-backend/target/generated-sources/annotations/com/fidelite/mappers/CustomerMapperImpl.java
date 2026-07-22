@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-20T16:25:35+0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
+    date = "2026-07-22T11:53:39+0300",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
 )
 @Component
 public class CustomerMapperImpl implements CustomerMapper {
@@ -27,10 +27,10 @@ public class CustomerMapperImpl implements CustomerMapper {
         customerResponseDTO.setDateNaissance( customer.getDateDeNaissance() );
         customerResponseDTO.setMarkettingConsent( customer.isMarketingConsent() );
         customerResponseDTO.setTierName( customerTierName( customer ) );
-        customerResponseDTO.setNom( customer.getNom() );
-        customerResponseDTO.setPrenom( customer.getPrenom() );
         customerResponseDTO.setEmail( customer.getEmail() );
+        customerResponseDTO.setNom( customer.getNom() );
         customerResponseDTO.setPhone( customer.getPhone() );
+        customerResponseDTO.setPrenom( customer.getPrenom() );
 
         return customerResponseDTO;
     }
@@ -44,11 +44,11 @@ public class CustomerMapperImpl implements CustomerMapper {
         Customer.CustomerBuilder customer = Customer.builder();
 
         customer.dateDeNaissance( dto.getDateNaissance() );
-        customer.nom( dto.getNom() );
-        customer.prenom( dto.getPrenom() );
         customer.email( dto.getEmail() );
-        customer.phone( dto.getPhone() );
         customer.marketingConsent( dto.isMarketingConsent() );
+        customer.nom( dto.getNom() );
+        customer.phone( dto.getPhone() );
+        customer.prenom( dto.getPrenom() );
 
         return customer.build();
     }

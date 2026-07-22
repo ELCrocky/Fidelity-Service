@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-20T16:29:37+0300",
+    date = "2026-07-22T11:53:40+0300",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
 )
 @Component
@@ -28,9 +28,9 @@ public class TransactionMapperImpl implements TransactionMapper {
         transactionResponseDTO.setProductNames( productsToNames( transaction.getProducts() ) );
         transactionResponseDTO.setCustomerName( customerToName( transactionCardCustomer( transaction ) ) );
         transactionResponseDTO.setCardBarcode( transactionCardBarcodeEan13( transaction ) );
+        transactionResponseDTO.setCreatedAt( transaction.getCreatedAt() );
         transactionResponseDTO.setPoints( transaction.getPoints() );
         transactionResponseDTO.setType( transaction.getType() );
-        transactionResponseDTO.setCreatedAt( transaction.getCreatedAt() );
 
         return transactionResponseDTO;
     }
@@ -43,9 +43,9 @@ public class TransactionMapperImpl implements TransactionMapper {
 
         Transaction.TransactionBuilder transaction = Transaction.builder();
 
+        transaction.idempotencyKey( dto.getIdempotencyKey() );
         transaction.points( dto.getPoints() );
         transaction.type( dto.getType() );
-        transaction.idempotencyKey( dto.getIdempotencyKey() );
 
         return transaction.build();
     }

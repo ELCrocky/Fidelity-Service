@@ -7,6 +7,95 @@
   gap: 16px;
 }
 
+.head-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-input {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  width: 200px;
+  outline: none;
+  &:focus { border-color: var(--primary); }
+}
+
+/* ── Sales section ─────────────────────────────── */
+.sales-section {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.sales-col {
+  background: var(--surface);
+  border-radius: 20px;
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 8px 20px var(--shadow-color);
+  overflow: hidden;
+}
+
+.sales-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 84%, var(--surface));
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-strong);
+  }
+}
+
+.sales-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 12px 18px;
+    text-align: left;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 84%, var(--surface));
+    font-size: 13px;
+  }
+  th { color: $text-muted; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { color: var(--text); }
+}
+
+.date-cell  { color: $text-muted; white-space: nowrap; }
+.muted-cell { color: $text-muted; }
+.strong     { font-weight: 600; color: var(--text-strong); }
+
+.group-list {
+  padding: 10px 0;
+}
+
+.group-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, var(--surface));
+
+  &:last-child { border-bottom: none; }
+}
+
+.group-name  { font-size: 13px; font-weight: 600; color: var(--text-strong); }
+.group-count { font-size: 12px; font-weight: 700; color: var(--primary); }
+
+@media (max-width: 900px) {
+  .sales-section { grid-template-columns: 1fr; }
+}
+
 /* Product table, toggle switch, and modal styling. */
 .page-head h1 {
   margin: 0;

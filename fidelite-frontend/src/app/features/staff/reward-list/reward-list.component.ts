@@ -20,6 +20,21 @@ export class RewardListComponent implements OnInit {
 
   protected rewards: Reward[] = [];
   protected showForm = false;
+
+  protected currentPage = 0;
+  protected readonly pageSize = 15;
+
+  protected get totalPages(): number { return Math.max(1, Math.ceil(this.rewards.length / this.pageSize)); }
+  protected get pageStart(): number { return this.currentPage * this.pageSize + 1; }
+  protected get pageEnd(): number { return Math.min(this.rewards.length, (this.currentPage + 1) * this.pageSize); }
+  protected get pagedRewards(): Reward[] {
+    const s = this.currentPage * this.pageSize;
+    return this.rewards.slice(s, s + this.pageSize);
+  }
+  protected get pageNumbers(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i); }
+  protected prevPage(): void { if (this.currentPage > 0) this.currentPage--; }
+  protected nextPage(): void { if (this.currentPage < this.totalPages - 1) this.currentPage++; }
+  protected goToPage(p: number): void { this.currentPage = p; }
   protected editingId: string | null = null;
   protected errorMessage: string | null = null;
 

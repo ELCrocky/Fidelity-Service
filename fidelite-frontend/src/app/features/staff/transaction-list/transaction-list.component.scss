@@ -128,3 +128,49 @@ td { color: var(--text); font-size: 14px; }
 	color: $text-muted;
 	padding: 40px 0;
 }
+
+/* ── Stats section ─────────────────────────────── */
+.stats-section {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 18px;
+	margin-top: 24px;
+}
+
+.stats-col {
+	background: var(--surface);
+	border-radius: 20px;
+	border: 1px solid var(--border-soft);
+	box-shadow: 0 8px 20px var(--shadow-color);
+	overflow: hidden;
+}
+
+.stats-head {
+	padding: 16px 20px;
+	border-bottom: 1px solid color-mix(in srgb, var(--border) 84%, var(--surface));
+
+	h2 {
+		margin: 0;
+		font-size: 16px;
+		font-weight: 700;
+		color: var(--text-strong);
+	}
+}
+
+.group-list { padding: 10px 0; }
+
+.group-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 20px;
+	border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, var(--surface));
+	&:last-child { border-bottom: none; }
+}
+
+.group-name { font-size: 13px; font-weight: 600; color: var(--text-strong); }
+.group-count { font-size: 12px; font-weight: 700; color: var(--primary); }
+
+@media (max-width: 900px) {
+	.stats-section { grid-template-columns: 1fr; }
+}

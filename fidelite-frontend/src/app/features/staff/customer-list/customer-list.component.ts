@@ -45,6 +45,27 @@ export class CustomerListComponent implements OnInit {
   protected selectedCustomer: StaffCustomer | null = null;
   protected selectedHistory: HistoryItem[] = [];
 
+  protected currentPage = 0;
+  protected readonly pageSize = 15;
+
+  protected get totalPages(): number { return Math.max(1, Math.ceil(this.filteredCustomers.length / this.pageSize)); }
+  protected get pageStart(): number { return this.currentPage * this.pageSize + 1; }
+  protected get pageEnd(): number { return Math.min(this.filteredCustomers.length, (this.currentPage + 1) * this.pageSize); }
+  protected get pagedCustomers(): StaffCustomer[] {
+    const s = this.currentPage * this.pageSize;
+    return this.filteredCustomers.slice(s, s + this.pageSize);
+  }
+  protected get activeCount(): number { return this.customers.filter(c => c.status === 'Actif').length; }
+  protected get totalPoints(): number { return this.customers.reduce((s, c) => s + c.points, 0); }
+  protected get avgPoints(): number { return this.customers.length ? Math.round(this.totalPoints / this.customers.length) : 0; }
+  protected get topByPoints(): StaffCustomer[] { return [...this.customers].sort((a, b) => b.points - a.points); }
+
+  protected get pageNumbers(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i); }
+  protected prevPage(): void { if (this.currentPage > 0) this.currentPage--; }
+  protected nextPage(): void { if (this.currentPage < this.totalPages - 1) this.currentPage++; }
+  protected goToPage(p: number): void { this.currentPage = p; }
+  protected onSearch(term: string): void { this.searchTerm = term; this.currentPage = 0; }
+
   ngOnInit(): void {
     const merchantId = this._tokenStorage.getMerchantId();
     if (!merchantId) return;

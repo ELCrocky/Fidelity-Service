@@ -4,7 +4,7 @@
 		<p>{{ totalElements }} transaction{{ totalElements !== 1 ? 's' : '' }} au total</p>
 	</div>
 	<div class="head-controls">
-		<select class="filter-select" [(ngModel)]="typeFilter">
+		<select class="filter-select" [ngModel]="typeFilter" (ngModelChange)="onTypeFilter($event)">
 			<option value="">Tous les types</option>
 			<option value="EARN">EARN</option>
 			<option value="REDEEM">REDEEM</option>
@@ -12,7 +12,7 @@
 			<option value="EXPIRE">EXPIRE</option>
 		</select>
 		<input class="search-input" type="text" placeholder="Chercher client, carte, produit…"
-			[(ngModel)]="searchTerm"/>
+			[ngModel]="searchTerm" (ngModelChange)="onSearch($event)"/>
 	</div>
 </section>
 
@@ -30,7 +30,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@for (tx of filtered; track tx.id) {
+				@for (tx of paged; track tx.id) {
 					<tr>
 						<td class="date-cell">{{ formatDate(tx.createdAt) }}</td>
 						<td class="strong">{{ tx.customerName || '—' }}</td>
@@ -60,4 +60,42 @@
 			</tbody>
 		</table>
 	</div>
+	@if (totalPages > 1) {
+		<div class="pagination-bar">
+			<button class="pag-btn" [disabled]="currentPage === 0" (click)="prevPage()">‹</button>
+			@for (p of pageNumbers; track p) {
+				<button class="pag-btn pag-btn--num" [class.is-active]="p === currentPage" (click)="goToPage(p)">{{ p + 1 }}</button>
+			}
+			<button class="pag-btn" [disabled]="currentPage >= totalPages - 1" (click)="nextPage()">›</button>
+		</div>
+	}
 </section>
+
+@if (transactions.length > 0) {
+	<div class="stats-section">
+		<div class="stats-col">
+			<div class="stats-head"><h2>Clients les plus actifs</h2></div>
+			<div class="group-list">
+				@for (g of clientGroups; track g.name) {
+					<div class="group-row">
+						<span class="group-name">{{ g.name }}</span>
+						<span class="group-count">{{ g.count }} transaction{{ g.count > 1 ? 's' : '' }}</span>
+					</div>
+				}
+			</div>
+		</div>
+		<div class="stats-col">
+			<div class="stats-head"><h2>Produits les plus commandés</h2></div>
+			<div class="group-list">
+				@for (g of productGroups; track g.name) {
+					<div class="group-row">
+						<span class="group-name">{{ g.name }}</span>
+						<span class="group-count">{{ g.count }} commande{{ g.count > 1 ? 's' : '' }}</span>
+					</div>
+				} @empty {
+					<div class="group-row"><span class="group-name muted">Aucune vente enregistrée</span></div>
+				}
+			</div>
+		</div>
+	</div>
+}

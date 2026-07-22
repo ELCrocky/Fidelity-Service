@@ -9,7 +9,7 @@
 </section>
 
 <section class="cards-grid">
-  @for (reward of rewards; track reward.id) {
+  @for (reward of pagedRewards; track reward.id) {
     <article class="reward-card">
       <div class="reward-card__icon">🎁</div>
       <div class="reward-card__top-actions">
@@ -22,6 +22,16 @@
     </article>
   }
 </section>
+
+@if (totalPages > 1) {
+  <div class="pagination-bar">
+    <button class="pag-btn" [disabled]="currentPage === 0" (click)="prevPage()">‹</button>
+    @for (p of pageNumbers; track p) {
+      <button class="pag-btn pag-btn--num" [class.is-active]="p === currentPage" (click)="goToPage(p)">{{ p + 1 }}</button>
+    }
+    <button class="pag-btn" [disabled]="currentPage >= totalPages - 1" (click)="nextPage()">›</button>
+  </div>
+}
 
 @if (showForm) {
   <div class="modal-backdrop">

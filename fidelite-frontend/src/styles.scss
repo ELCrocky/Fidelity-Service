@@ -73,3 +73,62 @@ body {
   background: var(--bg);
   color: var(--text);
 }
+
+/* ── Pagination (shared across all list pages) ── */
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 12px 20px;
+  border-top: 1px solid color-mix(in srgb, var(--border) 84%, var(--surface));
+}
+
+.pagination-bar--inline {
+  border-top: none;
+  padding: 0;
+}
+
+.pag-info {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-right: 4px;
+}
+
+.pag-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+
+  &:hover:not(:disabled):not(.is-active) {
+    background: color-mix(in srgb, var(--primary) 10%, var(--surface));
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  &--num {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  &.is-active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    cursor: default;
+    box-shadow: 0 4px 10px rgba(249, 115, 22, 0.35);
+  }
+}

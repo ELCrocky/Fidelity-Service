@@ -4,8 +4,11 @@
     <h1>Produits</h1>
     <p>Gérez les produits et leurs points attribués</p>
   </div>
-
-  <button type="button" class="primary-btn" (click)="openForm()">+ Ajouter un produit</button>
+  <div class="head-right">
+    <input class="search-input" type="text" placeholder="Rechercher…"
+      [ngModel]="searchTerm" (ngModelChange)="onSearch($event)"/>
+    <button type="button" class="primary-btn" (click)="openForm()">+ Ajouter un produit</button>
+  </div>
 </section>
 
 <section class="panel">
@@ -20,7 +23,7 @@
       </tr>
     </thead>
     <tbody>
-      @for (product of products; track product.id) {
+      @for (product of pagedProducts; track product.id) {
         <tr>
           <td class="strong">{{ product.name }}</td>
           <td><span class="tag tag--{{ product.productType.toLowerCase() }}">{{ labels[product.productType] }}</span></td>
@@ -37,7 +40,62 @@
       }
     </tbody>
   </table>
+  @if (totalPages > 1) {
+    <div class="pagination-bar">
+      <button class="pag-btn" [disabled]="currentPage === 0" (click)="prevPage()">‹</button>
+      @for (p of pageNumbers; track p) {
+        <button class="pag-btn pag-btn--num" [class.is-active]="p === currentPage" (click)="goToPage(p)">{{ p + 1 }}</button>
+      }
+      <button class="pag-btn" [disabled]="currentPage >= totalPages - 1" (click)="nextPage()">›</button>
+    </div>
+  }
 </section>
+
+<!-- Historique des ventes -->
+@if (salesTimeline.length > 0) {
+  <section class="sales-section">
+    <div class="sales-col">
+      <div class="sales-head">
+        <h2>Historique des ventes</h2>
+        @if (salesTotalPages > 1) {
+          <div class="pagination-bar pagination-bar--inline">
+            <button class="pag-btn" [disabled]="salesPage === 0" (click)="prevSalesPage()">‹</button>
+            @for (p of salesPageNumbers; track p) {
+              <button class="pag-btn pag-btn--num" [class.is-active]="p === salesPage" (click)="goToSalesPage(p)">{{ p + 1 }}</button>
+            }
+            <button class="pag-btn" [disabled]="salesPage >= salesTotalPages - 1" (click)="nextSalesPage()">›</button>
+          </div>
+        }
+      </div>
+      <table class="sales-table">
+        <thead>
+          <tr><th>Date</th><th>Produit</th><th>Client</th></tr>
+        </thead>
+        <tbody>
+          @for (s of pagedSales; track s.date + s.productName + s.customerName) {
+            <tr>
+              <td class="date-cell">{{ formatDate(s.date) }}</td>
+              <td class="strong">{{ s.productName }}</td>
+              <td class="muted-cell">{{ s.customerName }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sales-col sales-col--grouped">
+      <div class="sales-head"><h2>Quantités vendues</h2></div>
+      <div class="group-list">
+        @for (g of salesGroups; track g.productName) {
+          <div class="group-row">
+            <span class="group-name">{{ g.productName }}</span>
+            <span class="group-count">{{ g.count }} vente{{ g.count > 1 ? 's' : '' }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+}
 
 @if (showForm) {
   <div class="modal-backdrop">
