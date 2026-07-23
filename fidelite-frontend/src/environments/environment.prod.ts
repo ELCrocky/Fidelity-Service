@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://ton-domaine.com'
+  apiUrl: 'https://fidelity-backend-wjtd.onrender.com'
 };
